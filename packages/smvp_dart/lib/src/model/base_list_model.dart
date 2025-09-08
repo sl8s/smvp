@@ -20,7 +20,9 @@ abstract base class BaseListModel<T extends BaseModel> {
     if (listModel.isEmpty) {
       return;
     }
-    baseModelIterator.setListModel(listModel);
+    baseModelIterator.setListModel(listModel
+        .map((T itemModel) => itemModel.clone() as T)
+        .toList(growable: true));
     listModel.clear();
     while (baseModelIterator.hasNext()) {
       listModel.add(baseModelIterator.next().clone() as T);

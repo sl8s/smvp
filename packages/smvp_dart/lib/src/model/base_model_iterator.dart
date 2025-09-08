@@ -17,8 +17,6 @@ abstract base class BaseModelIterator<T extends BaseModel> {
 
   @nonVirtual
   void setListModel(List<T> listModel) {
-    this.listModel = listModel
-        .map((T itemModel) => itemModel.clone() as T)
-        .toList(growable: true);
+    this.listModel = listModel;
   }
 }
