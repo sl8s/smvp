@@ -144,5 +144,5 @@ export declare class Result<T> {
 }
 export declare function debugPrint(text: string): void;
 export declare function debugPrintException(text: string): void;
-export declare function debugPrintMethod(text: string): void;
+export declare function debugPrintMethod(methodName: string): void;
 //# sourceMappingURL=index.d.ts.map

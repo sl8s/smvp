@@ -405,6 +405,6 @@ export function debugPrint(text) {
 export function debugPrintException(text) {
     debugPrint("\x1B[31m" + text + "\x1b[0m");
 }
-export function debugPrintMethod(text) {
-    debugPrint("\x1B[36m[Method] " + text + "\x1b[0m");
+export function debugPrintMethod(methodName) {
+    debugPrint("\x1B[36m[Method] " + methodName + "\x1b[0m");
 }

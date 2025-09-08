@@ -520,6 +520,6 @@ export function debugPrintException(text: string): void {
     debugPrint("\x1B[31m" + text +"\x1b[0m");
 }
 
-export function debugPrintMethod(text: string): void {
-    debugPrint("\x1B[36m[Method] " + text +"\x1b[0m");
+export function debugPrintMethod(methodName: string): void {
+    debugPrint("\x1B[36m[Method] " + methodName +"\x1b[0m");
 }

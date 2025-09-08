@@ -428,6 +428,6 @@ function debugPrint(text) {
 function debugPrintException(text) {
     debugPrint("\x1B[31m" + text + "\x1b[0m");
 }
-function debugPrintMethod(text) {
-    debugPrint("\x1B[36m[Method] " + text + "\x1b[0m");
+function debugPrintMethod(methodName) {
+    debugPrint("\x1B[36m[Method] " + methodName + "\x1b[0m");
 }
