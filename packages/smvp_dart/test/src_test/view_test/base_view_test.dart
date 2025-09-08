@@ -11,6 +11,9 @@ final class MainView extends BaseView<EnumMainView> {
     }
     return EnumMainView.success;
   }
+
+  @override
+  void dispose() {}
 }
 
 void main() {

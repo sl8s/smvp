@@ -153,7 +153,6 @@ final class MainView extends BaseView<EnumMainView> {
   bool _isLoading = true;
   Jsonip _jsonip = Jsonip(ip: "");
 
-  @protected
   @override
   EnumMainView getViewState() {
     if (_isLoading) {
@@ -163,6 +162,12 @@ final class MainView extends BaseView<EnumMainView> {
       return EnumMainView.exception;
     }
     return EnumMainView.success;
+  }
+
+  @override
+  void dispose() {
+    _jsonipWrapperRepository.dispose();
+    _shareProxy.deleteListenersByListenerId([]);
   }
 
   Future<void> init() async {
@@ -176,11 +181,6 @@ final class MainView extends BaseView<EnumMainView> {
     _isLoading = false;
     _jsonip = resultJsonip.data!.fromMap();
     _build();
-  }
-
-  void dispose() {
-    _jsonipWrapperRepository.dispose();
-    _shareProxy.deleteListenersByListenerId([]);
   }
 
   void _build() {
