@@ -1,0 +1,13 @@
+{
+  "name": "example",
+  "version": "1.0.0+1",
+  "private": true,
+  "scripts": {
+    "download": "npm install .",
+    "build": "tsc",
+    "index" : "node ./build/index.js"
+  },
+  "dependencies": {
+    "smvp_typescript": "file:.."
+  }
+}

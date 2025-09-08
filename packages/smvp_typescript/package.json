@@ -1,0 +1,35 @@
+{
+  "name": "smvp_typescript",
+  "version": "0.0.1",
+  "source": "index.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/cjs/index.d.ts",
+  "scripts": {
+    "download" : "npm install . && npm install typescript -g",
+    "build:esm" : "tsc -p tsconfig.esm.json",
+    "build:cjs" : "tsc -p tsconfig.cjs.json"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "license": "MIT",
+  "files": [
+    "dist/",
+    "example/",
+    ".gitignore",
+    "index.ts",
+    "LICENSE",
+    "tsconfig.base.json",
+    "tsconfig.cjs.json",
+    "tsconfig.esm.json"
+  ]
+}
