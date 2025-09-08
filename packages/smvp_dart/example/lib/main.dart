@@ -30,7 +30,7 @@ base class ListJsonip<T extends Jsonip> extends BaseListModel<T> {
 
   @override
   ListJsonip<T> clone() {
-    List<T> newListModel = List.empty(growable: true);
+    final List<T> newListModel = List.empty(growable: true);
     for (final T itemModel in listModel) {
       newListModel.add(itemModel.clone() as T);
     }
@@ -39,7 +39,7 @@ base class ListJsonip<T extends Jsonip> extends BaseListModel<T> {
 
   @override
   List<Map<String, dynamic>> toListMap() {
-    List<Map<String, dynamic>> listMap = List.empty(growable: true);
+    final List<Map<String, dynamic>> listMap = List.empty(growable: true);
     for (final T itemModel in listModel) {
       listMap.add(itemModel.toMap());
     }
