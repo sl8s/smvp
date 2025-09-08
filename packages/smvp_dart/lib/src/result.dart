@@ -3,7 +3,7 @@ import 'package:smvp_dart/src/base_exception.dart';
 import 'package:smvp_dart/src/exception_adapter.dart';
 
 @immutable
-final class Result<T extends Object> {
+final class Result<T> {
   final T? data;
   final ExceptionAdapter exceptionAdapter;
 
