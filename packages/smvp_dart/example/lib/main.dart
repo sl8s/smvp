@@ -38,6 +38,15 @@ base class ListJsonip<T extends Jsonip> extends BaseListModel<T> {
   }
 
   @override
+  List<Map<String, dynamic>> toListMap() {
+    List<Map<String, dynamic>> listMap = List.empty(growable: true);
+    for (final T itemModel in listModel) {
+      listMap.add(itemModel.toMap());
+    }
+    return listMap;
+  }
+
+  @override
   String toString() {
     String str = "\n";
     for (final T itemModel in listModel) {

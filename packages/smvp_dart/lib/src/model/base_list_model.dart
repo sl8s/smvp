@@ -10,6 +10,8 @@ abstract base class BaseListModel<T extends BaseModel> {
 
   BaseListModel<T> clone();
 
+  List<Map<String, dynamic>> toListMap();
+
   @override
   String toString();
 

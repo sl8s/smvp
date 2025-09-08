@@ -41,6 +41,15 @@ base class ListProduct<T extends Product> extends BaseListModel<T> {
   }
 
   @override
+  List<Map<String, dynamic>> toListMap() {
+    List<Map<String, dynamic>> listMap = List.empty(growable: true);
+    for (final T itemModel in listModel) {
+      listMap.add(itemModel.toMap());
+    }
+    return listMap;
+  }
+
+  @override
   String toString() {
     String str = "\n";
     for (final T itemModel in listModel) {
@@ -97,6 +106,32 @@ void main() {
               cloneListProduct.listModel.removeAt(0);
               expect(10, listProduct.listModel.length);
               expect(9, cloneListProduct.listModel.length);
+            }),
+            test("toListMap()", () {
+              final generatedListProduct = List<Product>.generate(10,
+                  (int index) => Product(id: "id$index", price: (100 + index)),
+                  growable: true);
+              final listProduct = ListProduct(listModel: generatedListProduct);
+              final listMapFromListProduct = listProduct.toListMap();
+              expect(
+                  true,
+                  listProduct.listModel.length ==
+                      listMapFromListProduct.length);
+              expect(10, listMapFromListProduct.length);
+              expect(
+                  [100, 101, 102, 103, 104, 105, 106, 107, 108, 109],
+                  equals([
+                    listMapFromListProduct[0]["price"],
+                    listMapFromListProduct[1]["price"],
+                    listMapFromListProduct[2]["price"],
+                    listMapFromListProduct[3]["price"],
+                    listMapFromListProduct[4]["price"],
+                    listMapFromListProduct[5]["price"],
+                    listMapFromListProduct[6]["price"],
+                    listMapFromListProduct[7]["price"],
+                    listMapFromListProduct[8]["price"],
+                    listMapFromListProduct[9]["price"],
+                  ]));
             }),
             test("toString()", () {
               final generatedListProduct = List<Product>.generate(1,
