@@ -1,35 +1,41 @@
 {
   "name": "smvp_typescript",
   "version": "0.0.1",
-  "source": "index.ts",
   "main": "dist/cjs/index.js",
-  "types": "dist/cjs/index.d.ts",
-  "scripts": {
-    "download" : "npm install . && npm install typescript -g",
-    "build:esm" : "tsc -p tsconfig.esm.json",
-    "build:cjs" : "tsc -p tsconfig.cjs.json"
-  },
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      }
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts"
     }
+  },
+  "scripts": {
+    "download" : "npm install .",
+    "build:cjs" : "tsc -p tsconfig.cjs.json",
+    "build:esm" : "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+    "tests": "npx jest tests"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.1.3",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
   },
   "license": "MIT",
   "files": [
     "dist/",
     "example/",
+    "tests/",
     ".gitignore",
     "index.ts",
     "LICENSE",
     "tsconfig.base.json",
     "tsconfig.cjs.json",
-    "tsconfig.esm.json"
+    "tsconfig.esm.json",
+    "tsconfig.types.json"
   ]
 }

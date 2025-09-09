@@ -1,9 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "display": "Base",
     "compilerOptions": {
-      "declaration": true,
-      "declarationMap": true,
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
       "isolatedModules": true,
@@ -11,8 +8,7 @@
       "preserveWatchOutput": true,
       "skipLibCheck": true,
       "strict": true,
-      "allowJs": true,
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
     },
     "exclude": ["node_modules"]
   }
