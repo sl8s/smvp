@@ -1,0 +1,20 @@
+name: packages-smvp_typescript-running_unit_tests.yml
+run-name: ${{ github.actor }} - packages-smvp_typescript-running_unit_tests.yml
+on:
+  push:
+  workflow_dispatch:
+env:
+  node_version: 24.7.0
+  working_directory: packages/smvp_typescript
+jobs:
+  task:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.node_version }}
+      - run: npm run download
+        working-directory: ${{ env.working_directory }}
+      - run: npm run test
+        working-directory: ${{ env.working_directory }}
