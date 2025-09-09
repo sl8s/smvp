@@ -4,6 +4,10 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
@@ -12,18 +16,16 @@
     }
   },
   "scripts": {
-    "download" : "npm install .",
-    "build:cjs" : "tsc -p tsconfig.cjs.json",
-    "build:esm" : "tsc -p tsconfig.esm.json",
+    "download": "npm install .",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
     "build:types": "tsc -p tsconfig.types.json",
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
-    "tests": "npx jest tests"
+    "test": "npx vitest run"
   },
   "devDependencies": {
-    "@types/jest": "^30.0.0",
-    "jest": "^30.1.3",
-    "ts-jest": "^29.4.1",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "license": "MIT",
   "files": [
