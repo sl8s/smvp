@@ -63,7 +63,7 @@ class JsonipWrapper extends BaseModelWrapper {
 }
 
 class ArrayJsonipWrapper extends BaseArrayModelWrapper {
-    public constructor(arrayMap: Array<Array<any>>) {
+    public constructor(arrayMap: Array<Record<string,any>>) {
         super(arrayMap);
     }
 
