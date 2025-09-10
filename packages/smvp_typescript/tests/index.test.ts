@@ -1,5 +1,5 @@
-import { expect, test, describe } from "vitest"
-import { BaseArrayModel, BaseModel, BaseModelIterator } from "..";
+import { vi, expect, test, describe } from "vitest"
+import { BaseArrayModel, BaseArrayModelWrapper, BaseModel, BaseModelIterator, BaseModelWrapper, BaseView, ExceptionAdapter, IterationService, ShareProxy, ShareService } from "..";
 
 class Product extends BaseModel {
     public readonly price: number;
@@ -53,6 +53,33 @@ class ArrayProduct<T extends Product> extends BaseArrayModel<T> {
     }
 }
 
+class ProductWrapper extends BaseModelWrapper {
+    public constructor(map: Record<string,any>) {
+        super(map);
+    }
+
+    public override fromMap(): Product {
+        return new Product(
+            this.map["id"],
+            this.map["price"]);
+    }
+}
+
+class ArrayProductWrapper extends BaseArrayModelWrapper {
+    public constructor(arrayMap: Array<Record<string,any>>) {
+        super(arrayMap);
+    }
+
+    public override fromArrayMap(): ArrayProduct<Product> {
+        const arrayModel = new Array<Product>();
+        for(const itemMap of this.arrayMap) {
+            const modelWrapper = new ProductWrapper(itemMap);
+            arrayModel.push(modelWrapper.fromMap());
+        }
+        return new ArrayProduct(arrayModel);
+    }
+}
+
 class ProductOrderByDescPriceIterator<T extends Product> extends BaseModelIterator<T> {
     public constructor() {
         super(0);
@@ -82,7 +109,35 @@ class ProductOrderByDescPriceIterator<T extends Product> extends BaseModelIterat
     }
 }
 
-  describe("BaseListModel", () => {
+interface Callback {
+    onCallback(data: string): void;
+}
+  
+class MockCallback implements Callback {
+    onCallback = vi.fn<(data: string) => void>();
+}
+
+enum EnumMainView {
+    exception,
+    success
+}
+
+class MainView extends BaseView<EnumMainView> {
+    public constructor() {
+        super();
+    }
+
+    public override getViewState(): EnumMainView {
+        if(this.exceptionAdapter.hasException()) {
+            return EnumMainView.exception;
+        }
+        return EnumMainView.success;
+    }
+
+    public override dispose(): void {}
+}
+
+describe("BaseArrayModel", () => {
     test("clone()", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
@@ -244,4 +299,352 @@ class ProductOrderByDescPriceIterator<T extends Product> extends BaseModelIterat
                 arrayProduct.arrayModel[1].price,
             ]);
     });
-  });
+});
+  
+describe("BaseArrayModelWrapper", () => {
+    test("fromArrayMap()", () => {
+        const generatedArrayProduct: Array<Product> = Array.from(
+            { length: 10 },
+            (_, index: number) => new Product("id"+index, (100 + index)));
+        const arrayProductWrapper = new ArrayProductWrapper(generatedArrayProduct);
+        const arrayProduct = arrayProductWrapper.fromArrayMap();
+        expect(10).toEqual(arrayProduct.arrayModel.length);
+        expect("id5").toEqual(arrayProduct.arrayModel[5].id);
+    });
+});
+
+describe("BaseModelIterator", () => {
+    test("next(), hasNext(), setArrayModel(arrayModel: Array<T>)", () => {
+        const generatedArrayProduct: Array<Product> = Array.from(
+            { length: 10 },
+            (_, index: number) => new Product("id"+index, (100 + index)));
+        const productOrderByDescPriceIterator = new ProductOrderByDescPriceIterator();
+        productOrderByDescPriceIterator.setArrayModel(generatedArrayProduct);
+        const arrayProduct = new Array<Product>();
+        while (productOrderByDescPriceIterator.hasNext()) {
+            arrayProduct.push(productOrderByDescPriceIterator.next().clone());
+        }
+        expect(10).toEqual(arrayProduct.length);
+        expect(
+            [109, 108, 107, 106, 105, 104, 103, 102, 101, 100])
+            .toEqual([
+                arrayProduct[0].price,
+                arrayProduct[1].price,
+                arrayProduct[2].price,
+                arrayProduct[3].price,
+                arrayProduct[4].price,
+                arrayProduct[5].price,
+                arrayProduct[6].price,
+                arrayProduct[7].price,
+                arrayProduct[8].price,
+                arrayProduct[9].price
+            ]);
+    });
+});
+
+describe("BaseModel", () => {
+    test("clone()", () => {
+        const product = new Product("id1",100);
+        const cloneProduct = product.clone();
+        expect(true).toEqual(product.id == cloneProduct.id);
+    });
+    test("toMap()", () => {
+        const product = new Product("id1",100);
+        expect({"id": "id1", "price": 100}).toEqual(product.toMap());
+    });
+    test("toString()", () => {
+        const product = new Product("id1",100);
+        expect("Product(id: id1, price: 100)").toEqual(product.toString());
+    });
+});
+
+describe("BaseModelWrapper", () => {
+    test("fromMap()", () => {
+        const map: Record<string, any> = {"id": "id1", "price": 100};
+        const productWrapper = new ProductWrapper(map);
+        const product: Product = productWrapper.fromMap();
+        expect(
+            ["id1", 100])
+            .toEqual([
+                product.id, 
+                product.price]);
+    });
+});
+
+describe("IterationService", () => {
+    test("next()", () => {
+        const iterationService = IterationService.instance;
+        expect(0).toEqual(iterationService.next());
+        expect(1).toEqual(iterationService.next());
+    });
+});
+
+describe("ShareProxy", () => {
+    test("getValue<T>(key: string, defaultValue: T)", () => {
+        const shareProxy = new ShareProxy();
+        expect("qwerty").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+        shareProxy.update("key","ytrewq");
+        expect("ytrewq").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+    });
+    test("update(key: string, value: any)", () => {
+        const shareProxy = new ShareProxy();
+        shareProxy.update("key","ytrewq");
+        expect("ytrewq").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+    });
+    test("delete(key: string)", () => {
+        const shareProxy = new ShareProxy();
+        shareProxy.update("key","ytrewq");
+        shareProxy.delete("key");
+        expect("qwerty").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+    });
+    test("addListener(key: string, callback: (event: any) => void), notifyListener(key: string, value: any)", () => {
+        const mockCallback = new MockCallback();
+        const shareProxy = new ShareProxy();
+        shareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.notifyListener("key", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(1);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+    });
+    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any)", () => {
+        const mockCallback = new MockCallback();
+        const shareProxy = new ShareProxy();
+        const secondShareProxy = new ShareProxy();
+        shareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.notifyListeners("key", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(2);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
+    });
+    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByKey(key: string)", () => {
+        const mockCallback = new MockCallback();
+        const shareProxy = new ShareProxy();
+        const secondShareProxy = new ShareProxy();
+        shareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.deleteAllListenersByKey("key");
+        shareProxy.notifyListeners("key", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
+    });
+    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByArrayKey(arrayKey: Array<string>)", () => {
+        const mockCallback = new MockCallback();
+        const shareProxy = new ShareProxy();
+        const secondShareProxy = new ShareProxy();
+        shareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.addListener("keyTwo", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("keyTwo", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.deleteAllListenersByArrayKey(["key", "keyTwo"]);
+        shareProxy.notifyListeners("key", "hello");
+        shareProxy.notifyListeners("keyTwo", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
+    });
+    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenerByListenerId(key: string)", () => {
+        const mockCallback = new MockCallback();
+        const shareProxy = new ShareProxy();
+        const secondShareProxy = new ShareProxy();
+        shareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.addListener("keyTwo", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("keyTwo", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.deleteListenerByListenerId("key");
+        shareProxy.notifyListeners("key", "hello");
+        shareProxy.notifyListeners("keyTwo", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(3);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(3,"hello");
+    });
+    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenersByListenerId(arrayKey: Array<string>)", () => {
+        const mockCallback = new MockCallback();
+        const shareProxy = new ShareProxy();
+        const secondShareProxy = new ShareProxy();
+        shareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("key", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.addListener("keyTwo", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        secondShareProxy.addListener("keyTwo", (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareProxy.deleteListenersByListenerId(["key","keyTwo"]);
+        shareProxy.notifyListeners("key", "hello");
+        shareProxy.notifyListeners("keyTwo", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(2);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
+    });
+});
+
+describe("ShareService", () => {
+    test("getValue<T>(key: string, defaultValue: T)", () => {
+        const shareService = ShareService.instance;
+        expect("qwerty").toEqual(shareService.getValue<string>("key", "qwerty"));
+        shareService.update("key","ytrewq");
+        expect("ytrewq").toEqual(shareService.getValue<string>("key", "qwerty"));
+    });
+    test("update(key: string, value: any)", () => {
+        const shareService = ShareService.instance;
+        shareService.update("key","ytrewq");
+        expect("ytrewq").toEqual(shareService.getValue<string>("key", "qwerty"));
+    });
+    test("delete(key: string)", () => {
+        const shareService = ShareService.instance;
+        shareService.update("key","ytrewq");
+        shareService.delete("key");
+        expect("qwerty").toEqual(shareService.getValue<string>("key", "qwerty"));
+    });
+    test("addListener(key: string, listenerId: number, callback: (event: any) => void), notifyListener(key: string, listenerId: number, value: any)", () => {
+        const mockCallback = new MockCallback();
+        const shareService = ShareService.instance;
+        shareService.addListener("key", 0, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("key", 1, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.notifyListener("key", 0, "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(1);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+    });
+    test("addListener(key: string, listenerId: number, callback: (event: any) => void), notifyListeners(key: string, value: any)", () => {
+        const mockCallback = new MockCallback();
+        const shareService = ShareService.instance;
+        shareService.addListener("key", 2, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("key", 3, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.notifyListeners("key", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(2);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
+    });
+    test("addListener(key: string, listenerId: number, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByKey(key: string)", () => {
+        const mockCallback = new MockCallback();
+        const shareService = ShareService.instance;
+        shareService.addListener("key", 4, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("key", 5, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.deleteAllListenersByKey("key");
+        shareService.notifyListeners("key", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
+    });
+    test("addListener(key: string, listenerId: number, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByArrayKey(arrayKey: Array<string>)", () => {
+        const mockCallback = new MockCallback();
+        const shareService = ShareService.instance;
+        shareService.addListener("key", 6, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("key", 7, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("keyTwo", 0, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("keyTwo", 1, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.deleteAllListenersByArrayKey(["key", "keyTwo"]);
+        shareService.notifyListeners("key", "hello");
+        shareService.notifyListeners("keyTwo", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
+    });
+    test("addListener(key: string, listenerId: number, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenerByListenerId(key: string, listenerId: number)", () => {
+        const mockCallback = new MockCallback();
+        const shareService = ShareService.instance;
+        shareService.addListener("key", 8, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("key", 9, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("keyTwo", 2, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("keyTwo", 3, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.deleteListenerByListenerId("key", 8);
+        shareService.notifyListeners("key", "hello");
+        shareService.notifyListeners("keyTwo", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(3);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(3,"hello");
+    });
+    test("addListener(key: string, listenerId: number, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenersByListenerId(arrayKey: Array<string>, listenerId: number)", () => {
+        const mockCallback = new MockCallback();
+        const shareService = ShareService.instance;
+        shareService.addListener("key", 55, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("key", 56, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("keyTwo", 55, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.addListener("keyTwo", 56, (event: string) => {
+            mockCallback.onCallback(event);
+        });
+        shareService.deleteListenersByListenerId(["key","keyTwo"],55);
+        shareService.notifyListeners("key", "hello");
+        shareService.notifyListeners("keyTwo", "hello");
+        expect(mockCallback.onCallback).toHaveBeenCalledTimes(2);
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
+        expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
+    });
+});
+
+describe("BaseView", () => {
+    test("getViewState()", () => {
+        const mainView = new MainView();
+        expect(EnumMainView.success).toEqual(mainView.getViewState());
+    });
+});
+
+describe("ExceptionAdapter", () => {
+    test("getKey()", () => {
+        const exceptionAdapter = new ExceptionAdapter(null);
+        expect("").toEqual(exceptionAdapter.getKey());
+    });
+    test("hasException()", () => {
+        const exceptionAdapter = new ExceptionAdapter(null);
+        expect(false).toEqual(exceptionAdapter.hasException());
+    });
+});
