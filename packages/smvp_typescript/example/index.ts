@@ -91,7 +91,7 @@ class DefaultHttpClientService extends BaseHttpClientService {
         super();
     }
 
-    public getHttpClient(): any {
+    public override getHttpClient(): any {
         throw new Error("Method not implemented.");
     }
 }
