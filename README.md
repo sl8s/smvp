@@ -287,41 +287,47 @@ public class TestView {
 - https://refactoring.guru/design-patterns/what-is-pattern
 - https://en.wikipedia.org/wiki/Software_design_pattern
 
-#### State Machine: BaseView
-
-- Explain
-
 #### Result/Either: Result, ResultModelWrapper, ResultListModelWrapper
 
-- Explain
+- The Result / Either pattern makes error handling explicit and predictable, eliminating hidden program crashes and magic values (Something like None or -1.).
+- Result (or Either) is a container that can be in one of two states:
+1) Success / Ok → contains a useful value.
+2) Error / Err → contains an error description.
 
-#### Similiar to "Proxy": ShareProxy
+#### Simliar to "Proxy": ShareProxy
 
-- Explain
+- ‘ShareProxy’ replaces ‘ShareService’ for the client:
+1) Intercepts all calls and delegates them to ‘ShareService’.
+2) Adds its own logic (automatic management of _listenerId).
+3) Controls access to the original service.
+- The method names are the same.
 
-#### Pub/Sub: ShareService, ShareProxy
+#### Similiar to "Pub/Sub": ShareService, ShareProxy
 
-- Explain
+- The Pub/Sub pattern is used so that a single data source can share information with all subscribers in real time, while the publisher does not know who exactly is receiving the data. This makes the system flexible and easy to extend.
 
 #### Similiar to "Adapter": ExceptionAdapter
 
-- Explain
+- ‘ExceptionAdapter’ uses the Adapter pattern to easily check for the presence of an exception via the hasException() method.
+This simplifies error handling by eliminating the need to work directly with BaseException and its nullable state.
+- The method names vary depending on the logic in the adapter.
 
 #### Singleton: ShareService, IterationService
 
-- Explain
+- The Singleton pattern creates a single instance of a class that exists for the entire lifetime of the application and is accessible from anywhere. It is most often used for managing a database or network, so that all parts of the program work with one object and do not create unnecessary connections.
 
 #### Template Method: BaseException
 
-- Explain
+- The 'BaseException' class uses the template method pattern, defining the general process of exception tracing in the constructor, while the specific output (toString()) is implemented in subclasses. This ensures consistent logging and simplifies the extension of exception types.
 
 #### Iterator: BaseModelIterator, BaseListModel
 
-- Explain
+- The Iterator pattern allows you to traverse the elements of a collection and sort them. It makes iterating over elements simple and convenient.
 
 #### Prototype: BaseModel, BaseListModel
 
-- Explain
+- The Prototype pattern creates new objects by cloning existing ones, without keeping a reference to the original. This prevents accidental changes to the original object and errors when working with its state.
+- Example: There is an object original with data {"x": 10}. Using the Prototype, a clone clone_obj is created, and its data is changed to {"x": 99}. Meanwhile, original remains unchanged, and the changes affect only the clone.
 
 ### Examples
 
