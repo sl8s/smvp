@@ -85,13 +85,14 @@ export declare abstract class BaseView<T extends string | number> implements IDi
     abstract getViewState(): T;
     abstract dispose(): void;
 }
-export declare abstract class BaseException {
+export declare abstract class BaseException extends Error {
     readonly key: string;
     private readonly source;
     private readonly type;
     protected constructor(source: string, type: string, key: string);
     abstract toString(): string;
-    protected debugPrintException(): void;
+    protected initException(): void;
+    private debugPrintException;
 }
 export declare enum EnumGuilty {
     developer = "developer",
@@ -109,8 +110,8 @@ export interface IDispose {
 }
 export declare class LocalException extends BaseException {
     readonly guilty: EnumGuilty;
-    readonly message: string;
-    constructor(source: string, key: string, guilty: EnumGuilty, message: string);
+    readonly extraMessage: string;
+    constructor(source: string, key: string, guilty: EnumGuilty, extraMessage: string);
     toString(): string;
 }
 export declare class NetworkException extends BaseException {

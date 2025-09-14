@@ -292,20 +292,27 @@ export abstract class BaseView<T extends string | number> implements IDispose {
     public abstract dispose(): void;
 }
 
-export abstract class BaseException {
+export abstract class BaseException extends Error {
     public readonly key: string;
     private readonly source: string;
     private readonly type: string;
 
     protected constructor(source: string, type: string, key: string) {
+        super();
         this.source = source;
         this.type = type;
         this.key = key;
+        this.name = this.constructor.name;
     }
 
     public abstract toString(): string;
        
-    protected debugPrintException(): void {
+    protected initException(): void {
+        this.message = this.toString();
+        this.debugPrintException();
+    }
+
+    private debugPrintException(): void {
         debugPrintException("\n===start_to_trace_exception===\n");
         debugPrintException("Source: " + this.source);
         debugPrintException("Type: " + this.type);
@@ -342,19 +349,19 @@ export interface IDispose {
 
 export class LocalException extends BaseException {
     public readonly guilty: EnumGuilty;
-    public readonly message: string;
+    public readonly extraMessage: string;
     
-    public constructor(source: string, key: string, guilty: EnumGuilty, message: string) {
+    public constructor(source: string, key: string, guilty: EnumGuilty, extraMessage: string) {
         super(source,"LocalException",key);
         this.guilty = guilty;
-        this.message = message;
-        this.debugPrintException();
+        this.extraMessage = extraMessage;
+        this.initException();
     }
 
     public override toString(): string {
         return "LocalException(key: " + this.key + ", " + 
             "guilty: " + this.guilty + ", " + 
-            "message: " + this.message + ")";
+            "extraMessage: " + this.extraMessage + ")";
     }
 }
 
@@ -368,7 +375,7 @@ export class NetworkException extends BaseException {
         this.statusCode = statusCode;
         this.nameStatusCode = nameStatusCode;
         this.descriptionStatusCode = descriptionStatusCode;
-        this.debugPrintException();
+        this.initException();
     }
 
     public static fromSourceAndKeyAndStatusCode(source: string, key: string, statusCode: number): NetworkException {

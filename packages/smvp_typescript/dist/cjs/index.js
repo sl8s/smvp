@@ -227,14 +227,20 @@ class BaseView {
     }
 }
 exports.BaseView = BaseView;
-class BaseException {
+class BaseException extends Error {
     key;
     source;
     type;
     constructor(source, type, key) {
+        super();
         this.source = source;
         this.type = type;
         this.key = key;
+        this.name = this.constructor.name;
+    }
+    initException() {
+        this.message = this.toString();
+        this.debugPrintException();
     }
     debugPrintException() {
         debugPrintException("\n===start_to_trace_exception===\n");
@@ -266,17 +272,17 @@ class ExceptionAdapter {
 exports.ExceptionAdapter = ExceptionAdapter;
 class LocalException extends BaseException {
     guilty;
-    message;
-    constructor(source, key, guilty, message) {
+    extraMessage;
+    constructor(source, key, guilty, extraMessage) {
         super(source, "LocalException", key);
         this.guilty = guilty;
-        this.message = message;
-        this.debugPrintException();
+        this.extraMessage = extraMessage;
+        this.initException();
     }
     toString() {
         return "LocalException(key: " + this.key + ", " +
             "guilty: " + this.guilty + ", " +
-            "message: " + this.message + ")";
+            "extraMessage: " + this.extraMessage + ")";
     }
 }
 exports.LocalException = LocalException;
@@ -289,7 +295,7 @@ class NetworkException extends BaseException {
         this.statusCode = statusCode;
         this.nameStatusCode = nameStatusCode;
         this.descriptionStatusCode = descriptionStatusCode;
-        this.debugPrintException();
+        this.initException();
     }
     static fromSourceAndKeyAndStatusCode(source, key, statusCode) {
         switch (statusCode) {
