@@ -414,17 +414,15 @@ class ResultModelWrapper {
 }
 exports.ResultModelWrapper = ResultModelWrapper;
 class Result {
-    data;
     exceptionAdapter;
-    constructor(data, exceptionAdapter) {
-        this.data = data;
+    constructor(exceptionAdapter) {
         this.exceptionAdapter = exceptionAdapter;
     }
-    static success(data) {
-        return new Result(data, new ExceptionAdapter(null));
+    static success() {
+        return new Result(new ExceptionAdapter(null));
     }
     static exception(exception) {
-        return new Result(null, new ExceptionAdapter(exception));
+        return new Result(new ExceptionAdapter(exception));
     }
 }
 exports.Result = Result;

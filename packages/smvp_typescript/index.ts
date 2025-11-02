@@ -501,21 +501,19 @@ export class ResultModelWrapper<T extends BaseModelWrapper> {
     }
 }
 
-export class Result<T> {
-    public readonly data: T | null;
+export class Result {
     public readonly exceptionAdapter: ExceptionAdapter;
 
-    private constructor(data: T | null, exceptionAdapter: ExceptionAdapter) {
-        this.data = data;
+    private constructor(exceptionAdapter: ExceptionAdapter) {
         this.exceptionAdapter = exceptionAdapter;
     }
 
-    public static success<Y>(data: Y): Result<Y> {
-        return new Result<Y>(data, new ExceptionAdapter(null));
+    public static success(): Result {
+        return new Result(new ExceptionAdapter(null));
     }
 
-    public static exception<Y>(exception: BaseException): Result<Y> {
-        return new Result<Y>(null, new ExceptionAdapter(exception));
+    public static exception(exception: BaseException): Result {
+        return new Result(new ExceptionAdapter(exception));
     }
 }
 

@@ -136,12 +136,11 @@ export declare class ResultModelWrapper<T extends BaseModelWrapper> {
     static success<Y extends BaseModelWrapper>(data: Y): ResultModelWrapper<Y>;
     static exception<Y extends BaseModelWrapper>(exception: BaseException): ResultModelWrapper<Y>;
 }
-export declare class Result<T> {
-    readonly data: T | null;
+export declare class Result {
     readonly exceptionAdapter: ExceptionAdapter;
     private constructor();
-    static success<Y>(data: Y): Result<Y>;
-    static exception<Y>(exception: BaseException): Result<Y>;
+    static success(): Result;
+    static exception(exception: BaseException): Result;
 }
 export declare function debugPrint(text: string): void;
 export declare function debugPrintException(text: string): void;
