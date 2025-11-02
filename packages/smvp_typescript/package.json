@@ -1,6 +1,6 @@
 {
   "name": "smvp_typescript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -21,7 +21,9 @@
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:types": "tsc -p tsconfig.types.json",
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
-    "test": "npx vitest run"
+    "test": "npx vitest run",
+    "dry_pack": "npm pack --dry-run",
+    "pack": "npm pack"
   },
   "devDependencies": {
     "typescript": "^5.9.2",
