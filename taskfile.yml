@@ -1,0 +1,59 @@
+version: "3"
+
+env:
+  smvp_dart_directory: ./packages/smvp_dart
+  smvp_dart_example_directory: ./packages/smvp_dart/example
+  smvp_typescript_directory: ./packages/smvp_typescript
+  smvp_typescript_example_directory: ./packages/smvp_typescript/example
+tasks:
+  flutter:clean:
+    dir: "{{.smvp_dart_directory}}"
+    cmds:
+      - flutter clean
+  flutter:download:
+    dir: "{{.smvp_dart_directory}}"
+    cmds:
+      - flutter pub get
+  flutter:upgrade:
+    dir: "{{.smvp_dart_directory}}"
+    cmds:
+      - flutter pub upgrade
+  flutter:outdated:
+    dir: "{{.smvp_dart_directory}}"
+    cmds:
+      - flutter pub outdated
+  flutter:test:
+    dir: "{{.smvp_dart_directory}}"
+    cmds:
+      - flutter test
+  dart:example:run:
+    dir: "{{.smvp_dart_example_directory}}"
+    cmds:
+      - dart pub get
+      - dart run lib/main.dart
+  npm:download:
+    dir: "{{.smvp_typescript_directory}}"
+    cmds:
+      - npm run download
+  npm:build:
+    dir: "{{.smvp_typescript_directory}}"
+    cmds:
+      - npm run build
+  npm:test:
+    dir: "{{.smvp_typescript_directory}}"
+    cmds:
+      - npm run test
+  npm:dry_pack:
+    dir: "{{.smvp_typescript_directory}}"
+    cmds:
+      - npm run dry_pack
+  npm:pack:
+    dir: "{{.smvp_typescript_directory}}"
+    cmds:
+      - npm run pack
+  npm:example:run:
+    dir: "{{.smvp_typescript_example_directory}}"
+    cmds:
+      - npm run download
+      - npm run build
+      - npm run index
