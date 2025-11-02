@@ -1,4 +1,13 @@
-## Rule
+## SMVP
+
+- SMVP (Share, Model, View, Psychology) - software design pattern
+![SMVP](/assets/smvp.png)
+- Share (Necessary to share data between views)
+- Model (These are business objects)
+- View (The interface that presents information to and accepts it from the user)
+- Psychology (The use of cognitive and gestalt psychology in the form of the [rule](#rule) below)
+
+### Rule
 
 - Names of private methods created by "if" statements (Not in for/while/do while loops). They must contain the following information:
 ![Names of private methods created by "if" statements](/assets/names_of_private_methods_created_by_if_statements.png)
