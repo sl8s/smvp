@@ -1,3 +1,29 @@
+## Install
+
+- [JavaScript/TypeScript](#javascripttypescript)
+- [Dart](#dart)
+
+### JavaScript/TypeScript
+
+- This is what it should look like in the `package.json` file:
+```json
+"dependencies": {
+  "smvp_typescript": "https://github.com/sl8s/smvp/releases/download/v1.0.1/smvp_typescript_v1_0_1.tgz"
+}
+```
+
+### Dart
+
+- This is what it should look like in the `pubspec.yaml` file:
+```yaml
+dependencies:
+  smvp_dart:
+    git:
+      url: https://github.com/sl8s/smvp.git
+      ref: v1.0.1
+      path: packages/smvp_dart
+```
+
 ## SMVP
 
 - SMVP (Share, Model, View, Psychology) - software design pattern
