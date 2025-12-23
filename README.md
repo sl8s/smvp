@@ -20,7 +20,7 @@ dependencies:
   smvp_dart:
     git:
       url: https://github.com/sl8s/smvp.git
-      ref: v1.0.2
+      ref: v1.0.4
       path: packages/smvp_dart
 ```
 
