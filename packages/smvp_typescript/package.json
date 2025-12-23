@@ -25,6 +25,9 @@
     "dry_pack": "npm pack --dry-run",
     "pack": "npm pack"
   },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  },
   "devDependencies": {
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
