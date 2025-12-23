@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export abstract class BaseArrayModelWrapper {
     protected readonly arrayMap: Array<Record<string,any>>;
     
@@ -37,16 +39,16 @@ export abstract class BaseArrayModel<T extends BaseModel> {
     }
 
     public updateById(newModel: T): void {
-        const index: number = this.arrayModel.findIndex((itemModel) => itemModel.id == newModel.id);
-        if(index == -1) {
+        const index: number = this.arrayModel.findIndex((itemModel) => itemModel.id === newModel.id);
+        if(index === -1) {
             return;
         }
         this.arrayModel.splice(index,1,newModel);
     }
 
     public deleteById(id: string): void {
-        const index: number = this.arrayModel.findIndex((itemModel) => itemModel.id == id);
-        if(index == -1) {
+        const index: number = this.arrayModel.findIndex((itemModel) => itemModel.id === id);
+        if(index === -1) {
             return;
         }
         this.arrayModel.splice(index,1);
@@ -58,8 +60,8 @@ export abstract class BaseArrayModel<T extends BaseModel> {
 
     public updateFromArrayById(newArrayModel: Array<T>): void {
         for(const newItemModel of newArrayModel) {
-            const index: number = this.arrayModel.findIndex((itemModel) => itemModel.id == newItemModel.id);
-            if(index == -1) {
+            const index: number = this.arrayModel.findIndex((itemModel) => itemModel.id === newItemModel.id);
+            if(index === -1) {
                 continue;
             }
             this.arrayModel.splice(index,1,newItemModel);
@@ -68,8 +70,8 @@ export abstract class BaseArrayModel<T extends BaseModel> {
 
     public deleteFromArrayById(arrayId: Array<string>): void {
         for(const itemId of arrayId) {
-            const index = this.arrayModel.findIndex((itemModel) => itemModel.id == itemId);
-            if(index == -1) {
+            const index = this.arrayModel.findIndex((itemModel) => itemModel.id === itemId);
+            if(index === -1) {
                 continue;
             }
             this.arrayModel.splice(index,1);
@@ -136,20 +138,26 @@ export abstract class BaseModel {
 export class IterationService {
     public static readonly instance = new IterationService();
 
-    private number: number;
+    private readonly arrayUuid: Array<string>;
 
     private constructor() {
-        this.number = -1;
+        this.arrayUuid = new Array<string>();
     }
 
-    public next(): number {
-        this.number++;
-        return this.number;
+    public next(): string {
+        const uuid = uuidv4();
+        for(const itemUuid of this.arrayUuid) {
+            if(itemUuid === uuid) {
+                return this.next();
+            }
+        }
+        this.arrayUuid.push(uuid);
+        return uuid;
     }
 }
 
 export class ShareProxy {
-    private readonly listenerId: number;
+    private readonly listenerId: string;
     private readonly shareService: ShareService;
 
     public constructor() {
@@ -202,7 +210,7 @@ export class ShareService {
     public static readonly instance = new ShareService();
     
     private readonly cache: Record<string,any>;
-    private readonly listenersByKey: Record<string, Record<number, (event: any) => void>>;
+    private readonly listenersByKey: Record<string, Record<string, (event: any) => void>>;
 
     private constructor() {
         this.cache = {};
@@ -224,7 +232,7 @@ export class ShareService {
         delete this.cache[key];
     }
 
-    public addListener(key: string, listenerId: number, callback: (event: any) => void): void {
+    public addListener(key: string, listenerId: string, callback: (event: any) => void): void {
         if(!(key in this.listenersByKey)) {
             this.listenersByKey[key] = {};
             this.listenersByKey[key][listenerId] = callback;
@@ -235,12 +243,12 @@ export class ShareService {
                 "ShareService",
                  key + "--" + listenerId,
                 EnumGuilty.developer,
-                "Under such a key and number there already exists a listener: " + key + "--" + listenerId);
+                "Under such a key and listenerId there already exists a listener: " + key + "--" + listenerId);
         }
         this.listenersByKey[key][listenerId] = callback;
     }
 
-    public notifyListener(key: string, listenerId: number, value: any): void {
+    public notifyListener(key: string, listenerId: string, value: any): void {
         if(!(key in this.listenersByKey)) {
             return;
         }
@@ -269,11 +277,11 @@ export class ShareService {
         }
     }
 
-    public deleteListenerByListenerId(key: string, listenerId: number): void {
+    public deleteListenerByListenerId(key: string, listenerId: string): void {
         delete this.listenersByKey[key][listenerId];
     }
 
-    public deleteListenersByListenerId(arrayKey: Array<string>, listenerId: number): void {
+    public deleteListenersByListenerId(arrayKey: Array<string>, listenerId: string): void {
         for(const itemKey of arrayKey) {
             delete this.listenersByKey[itemKey][listenerId];
         }

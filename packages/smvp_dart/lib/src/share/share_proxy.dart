@@ -4,7 +4,7 @@ import 'package:smvp_dart/src/share/share_service.dart';
 
 @immutable
 final class ShareProxy {
-  final int _listenerId;
+  final String _listenerId;
   final ShareService _shareService;
 
   ShareProxy()

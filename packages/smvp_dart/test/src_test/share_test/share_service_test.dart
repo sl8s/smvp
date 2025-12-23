@@ -30,44 +30,44 @@ void main() {
               expect("qwerty", shareService.getValue<String>("key", "qwerty"));
             }),
             test(
-                "addListener(String key, int listenerId, void Function(dynamic event) callback), "
-                "notifyListener(String key, int listenerId, dynamic value)",
+                "addListener(String key, String listenerId, void Function(dynamic event) callback), "
+                "notifyListener(String key, String listenerId, dynamic value)",
                 () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
-              shareService.addListener("key", 0, (event) {
+              shareService.addListener("key", "0", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("key", 1, (event) {
+              shareService.addListener("key", "1", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.notifyListener("key", 0, "hello");
+              shareService.notifyListener("key", "0", "hello");
               verify(() => mockCallback.onCallback("hello")).called(1);
             }),
             test(
-                "addListener(String key, int listenerId, void Function(dynamic event) callback), "
+                "addListener(String key, String listenerId, void Function(dynamic event) callback), "
                 "notifyListeners(String key, dynamic value)", () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
-              shareService.addListener("key", 2, (event) {
+              shareService.addListener("key", "2", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("key", 3, (event) {
+              shareService.addListener("key", "3", (event) {
                 mockCallback.onCallback(event as String);
               });
               shareService.notifyListeners("key", "hello");
               verify(() => mockCallback.onCallback("hello")).called(2);
             }),
             test(
-                "addListener(String key, int listenerId, void Function(dynamic event) callback), "
+                "addListener(String key, String listenerId, void Function(dynamic event) callback), "
                 "notifyListeners(String key, dynamic value), "
                 "deleteAllListenersByKey(String key)", () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
-              shareService.addListener("key", 4, (event) {
+              shareService.addListener("key", "4", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("key", 5, (event) {
+              shareService.addListener("key", "5", (event) {
                 mockCallback.onCallback(event as String);
               });
               shareService.deleteAllListenersByKey("key");
@@ -75,21 +75,21 @@ void main() {
               verifyNever(() => mockCallback.onCallback("hello"));
             }),
             test(
-                "addListener(String key, int listenerId, void Function(dynamic event) callback), "
+                "addListener(String key, String listenerId, void Function(dynamic event) callback), "
                 "notifyListeners(String key, dynamic value), "
                 "deleteAllListenersByListKey(List<String> listKey)", () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
-              shareService.addListener("key", 6, (event) {
+              shareService.addListener("key", "6", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("key", 7, (event) {
+              shareService.addListener("key", "7", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("keyTwo", 0, (event) {
+              shareService.addListener("keyTwo", "0", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("keyTwo", 1, (event) {
+              shareService.addListener("keyTwo", "1", (event) {
                 mockCallback.onCallback(event as String);
               });
               shareService.deleteAllListenersByListKey(["key", "keyTwo"]);
@@ -98,48 +98,48 @@ void main() {
               verifyNever(() => mockCallback.onCallback("hello"));
             }),
             test(
-                "addListener(String key, int listenerId, void Function(dynamic event) callback), "
+                "addListener(String key, String listenerId, void Function(dynamic event) callback), "
                 "notifyListeners(String key, dynamic value), "
-                "deleteListenerByListenerId(String key, int listenerId)", () {
+                "deleteListenerByListenerId(String key, String listenerId)", () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
-              shareService.addListener("key", 8, (event) {
+              shareService.addListener("key", "8", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("key", 9, (event) {
+              shareService.addListener("key", "9", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("keyTwo", 2, (event) {
+              shareService.addListener("keyTwo", "2", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("keyTwo", 3, (event) {
+              shareService.addListener("keyTwo", "3", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.deleteListenerByListenerId("key", 8);
+              shareService.deleteListenerByListenerId("key", "8");
               shareService.notifyListeners("key", "hello");
               shareService.notifyListeners("keyTwo", "hello");
               verify(() => mockCallback.onCallback("hello")).called(3);
             }),
             test(
-                "addListener(String key, int listenerId, void Function(dynamic event) callback), "
+                "addListener(String key, String listenerId, void Function(dynamic event) callback), "
                 "notifyListeners(String key, dynamic value), "
-                "deleteListenersByListenerId(List<String> listKey, int listenerId)",
+                "deleteListenersByListenerId(List<String> listKey, String listenerId)",
                 () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
-              shareService.addListener("key", 55, (event) {
+              shareService.addListener("key", "55", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("key", 56, (event) {
+              shareService.addListener("key", "56", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("keyTwo", 55, (event) {
+              shareService.addListener("keyTwo", "55", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.addListener("keyTwo", 56, (event) {
+              shareService.addListener("keyTwo", "56", (event) {
                 mockCallback.onCallback(event as String);
               });
-              shareService.deleteListenersByListenerId(["key", "keyTwo"], 55);
+              shareService.deleteListenersByListenerId(["key", "keyTwo"], "55");
               shareService.notifyListeners("key", "hello");
               shareService.notifyListeners("keyTwo", "hello");
               verify(() => mockCallback.onCallback("hello")).called(2);

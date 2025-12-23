@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 export class BaseArrayModelWrapper {
     arrayMap;
     constructor(arrayMap) {
@@ -23,15 +24,15 @@ export class BaseArrayModel {
         this.arrayModel.push(newModel);
     }
     updateById(newModel) {
-        const index = this.arrayModel.findIndex((itemModel) => itemModel.id == newModel.id);
-        if (index == -1) {
+        const index = this.arrayModel.findIndex((itemModel) => itemModel.id === newModel.id);
+        if (index === -1) {
             return;
         }
         this.arrayModel.splice(index, 1, newModel);
     }
     deleteById(id) {
-        const index = this.arrayModel.findIndex((itemModel) => itemModel.id == id);
-        if (index == -1) {
+        const index = this.arrayModel.findIndex((itemModel) => itemModel.id === id);
+        if (index === -1) {
             return;
         }
         this.arrayModel.splice(index, 1);
@@ -41,8 +42,8 @@ export class BaseArrayModel {
     }
     updateFromArrayById(newArrayModel) {
         for (const newItemModel of newArrayModel) {
-            const index = this.arrayModel.findIndex((itemModel) => itemModel.id == newItemModel.id);
-            if (index == -1) {
+            const index = this.arrayModel.findIndex((itemModel) => itemModel.id === newItemModel.id);
+            if (index === -1) {
                 continue;
             }
             this.arrayModel.splice(index, 1, newItemModel);
@@ -50,8 +51,8 @@ export class BaseArrayModel {
     }
     deleteFromArrayById(arrayId) {
         for (const itemId of arrayId) {
-            const index = this.arrayModel.findIndex((itemModel) => itemModel.id == itemId);
-            if (index == -1) {
+            const index = this.arrayModel.findIndex((itemModel) => itemModel.id === itemId);
+            if (index === -1) {
                 continue;
             }
             this.arrayModel.splice(index, 1);
@@ -93,13 +94,19 @@ export class BaseModel {
 }
 export class IterationService {
     static instance = new IterationService();
-    number;
+    arrayUuid;
     constructor() {
-        this.number = -1;
+        this.arrayUuid = new Array();
     }
     next() {
-        this.number++;
-        return this.number;
+        const uuid = uuidv4();
+        for (const itemUuid of this.arrayUuid) {
+            if (itemUuid === uuid) {
+                return this.next();
+            }
+        }
+        this.arrayUuid.push(uuid);
+        return uuid;
     }
 }
 export class ShareProxy {
@@ -167,7 +174,7 @@ export class ShareService {
             return;
         }
         if (listenerId in this.listenersByKey[key]) {
-            throw new LocalException("ShareService", key + "--" + listenerId, EnumGuilty.developer, "Under such a key and number there already exists a listener: " + key + "--" + listenerId);
+            throw new LocalException("ShareService", key + "--" + listenerId, EnumGuilty.developer, "Under such a key and listenerId there already exists a listener: " + key + "--" + listenerId);
         }
         this.listenersByKey[key][listenerId] = callback;
     }

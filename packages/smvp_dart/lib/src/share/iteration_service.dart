@@ -1,12 +1,20 @@
+import 'package:uuid/uuid.dart';
+
 final class IterationService {
   static final IterationService instance = IterationService._();
 
-  int _number;
+  final List<String> _listUuid;
 
-  IterationService._() : _number = -1;
+  IterationService._() : _listUuid = List<String>.empty(growable: true);
 
-  int next() {
-    _number++;
-    return _number;
+  String next() {
+    final uuid = Uuid().v4();
+    for (final itemUuid in _listUuid) {
+      if (itemUuid == uuid) {
+        return next();
+      }
+    }
+    _listUuid.add(uuid);
+    return uuid;
   }
 }

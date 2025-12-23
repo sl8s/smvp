@@ -7,8 +7,9 @@ void main() {
       () => {
             test("next()", () {
               final iterationService = IterationService.instance;
-              expect(0, iterationService.next());
-              expect(1, iterationService.next());
+              final id = iterationService.next();
+              final idSecond = iterationService.next();
+              expect(true, id != idSecond);
             }),
           });
 }

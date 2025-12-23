@@ -44,9 +44,9 @@ export declare abstract class BaseModel {
 }
 export declare class IterationService {
     static readonly instance: IterationService;
-    private number;
+    private readonly arrayUuid;
     private constructor();
-    next(): number;
+    next(): string;
 }
 export declare class ShareProxy {
     private readonly listenerId;
@@ -71,13 +71,13 @@ export declare class ShareService {
     getValue<T>(key: string, defaultValue: T): T;
     update(key: string, value: any): void;
     delete(key: string): void;
-    addListener(key: string, listenerId: number, callback: (event: any) => void): void;
-    notifyListener(key: string, listenerId: number, value: any): void;
+    addListener(key: string, listenerId: string, callback: (event: any) => void): void;
+    notifyListener(key: string, listenerId: string, value: any): void;
     notifyListeners(key: string, value: any): void;
     deleteAllListenersByKey(key: string): void;
     deleteAllListenersByArrayKey(arrayKey: Array<string>): void;
-    deleteListenerByListenerId(key: string, listenerId: number): void;
-    deleteListenersByListenerId(arrayKey: Array<string>, listenerId: number): void;
+    deleteListenerByListenerId(key: string, listenerId: string): void;
+    deleteListenersByListenerId(arrayKey: Array<string>, listenerId: string): void;
 }
 export declare abstract class BaseView<T extends string | number> implements IDispose {
     protected exceptionAdapter: ExceptionAdapter;

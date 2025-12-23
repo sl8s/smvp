@@ -4,6 +4,7 @@ exports.Result = exports.ResultModelWrapper = exports.ResultArrayModelWrapper = 
 exports.debugPrint = debugPrint;
 exports.debugPrintException = debugPrintException;
 exports.debugPrintMethod = debugPrintMethod;
+const uuid_1 = require("uuid");
 class BaseArrayModelWrapper {
     arrayMap;
     constructor(arrayMap) {
@@ -30,15 +31,15 @@ class BaseArrayModel {
         this.arrayModel.push(newModel);
     }
     updateById(newModel) {
-        const index = this.arrayModel.findIndex((itemModel) => itemModel.id == newModel.id);
-        if (index == -1) {
+        const index = this.arrayModel.findIndex((itemModel) => itemModel.id === newModel.id);
+        if (index === -1) {
             return;
         }
         this.arrayModel.splice(index, 1, newModel);
     }
     deleteById(id) {
-        const index = this.arrayModel.findIndex((itemModel) => itemModel.id == id);
-        if (index == -1) {
+        const index = this.arrayModel.findIndex((itemModel) => itemModel.id === id);
+        if (index === -1) {
             return;
         }
         this.arrayModel.splice(index, 1);
@@ -48,8 +49,8 @@ class BaseArrayModel {
     }
     updateFromArrayById(newArrayModel) {
         for (const newItemModel of newArrayModel) {
-            const index = this.arrayModel.findIndex((itemModel) => itemModel.id == newItemModel.id);
-            if (index == -1) {
+            const index = this.arrayModel.findIndex((itemModel) => itemModel.id === newItemModel.id);
+            if (index === -1) {
                 continue;
             }
             this.arrayModel.splice(index, 1, newItemModel);
@@ -57,8 +58,8 @@ class BaseArrayModel {
     }
     deleteFromArrayById(arrayId) {
         for (const itemId of arrayId) {
-            const index = this.arrayModel.findIndex((itemModel) => itemModel.id == itemId);
-            if (index == -1) {
+            const index = this.arrayModel.findIndex((itemModel) => itemModel.id === itemId);
+            if (index === -1) {
                 continue;
             }
             this.arrayModel.splice(index, 1);
@@ -105,13 +106,19 @@ class BaseModel {
 exports.BaseModel = BaseModel;
 class IterationService {
     static instance = new IterationService();
-    number;
+    arrayUuid;
     constructor() {
-        this.number = -1;
+        this.arrayUuid = new Array();
     }
     next() {
-        this.number++;
-        return this.number;
+        const uuid = (0, uuid_1.v4)();
+        for (const itemUuid of this.arrayUuid) {
+            if (itemUuid === uuid) {
+                return this.next();
+            }
+        }
+        this.arrayUuid.push(uuid);
+        return uuid;
     }
 }
 exports.IterationService = IterationService;
@@ -181,7 +188,7 @@ class ShareService {
             return;
         }
         if (listenerId in this.listenersByKey[key]) {
-            throw new LocalException("ShareService", key + "--" + listenerId, EnumGuilty.developer, "Under such a key and number there already exists a listener: " + key + "--" + listenerId);
+            throw new LocalException("ShareService", key + "--" + listenerId, EnumGuilty.developer, "Under such a key and listenerId there already exists a listener: " + key + "--" + listenerId);
         }
         this.listenersByKey[key][listenerId] = callback;
     }

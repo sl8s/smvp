@@ -7,7 +7,7 @@ final class ShareService {
   static final ShareService instance = ShareService._();
 
   final Map<String, dynamic> _cache;
-  final Map<String, Map<int, void Function(dynamic event)>> _listenersByKey;
+  final Map<String, Map<String, void Function(dynamic event)>> _listenersByKey;
 
   ShareService._()
       : _cache = {},
@@ -29,9 +29,9 @@ final class ShareService {
   }
 
   void addListener(
-      String key, int listenerId, void Function(dynamic event) callback) {
+      String key, String listenerId, void Function(dynamic event) callback) {
     if (!_listenersByKey.containsKey(key)) {
-      _listenersByKey[key] = <int, void Function(dynamic event)>{};
+      _listenersByKey[key] = <String, void Function(dynamic event)>{};
       _listenersByKey[key]?[listenerId] = callback;
       return;
     }
@@ -41,12 +41,12 @@ final class ShareService {
           key: "$key--$listenerId",
           guilty: EnumGuilty.developer,
           message:
-              "Under such a key and number there already exists a listener: $key--$listenerId");
+              "Under such a key and listenerId there already exists a listener: $key--$listenerId");
     }
     _listenersByKey[key]?[listenerId] = callback;
   }
 
-  void notifyListener(String key, int listenerId, dynamic value) {
+  void notifyListener(String key, String listenerId, dynamic value) {
     if (!_listenersByKey.containsKey(key)) {
       return;
     }
@@ -60,7 +60,7 @@ final class ShareService {
     if (!_listenersByKey.containsKey(key)) {
       return;
     }
-    for (final MapEntry<int, void Function(dynamic event)> entry
+    for (final MapEntry<String, void Function(dynamic event)> entry
         in _listenersByKey[key]?.entries ?? []) {
       entry.value(value);
     }
@@ -76,11 +76,11 @@ final class ShareService {
     }
   }
 
-  void deleteListenerByListenerId(String key, int listenerId) {
+  void deleteListenerByListenerId(String key, String listenerId) {
     _listenersByKey[key]?.remove(listenerId);
   }
 
-  void deleteListenersByListenerId(List<String> listKey, int listenerId) {
+  void deleteListenersByListenerId(List<String> listKey, String listenerId) {
     for (final String itemKey in listKey) {
       _listenersByKey[itemKey]?.remove(listenerId);
     }
