@@ -59,18 +59,18 @@ base class ListProduct<T extends Product> extends BaseListModel<T> {
   }
 }
 
-final class ProductOrderByDescPriceIterator<T extends Product>
+final class ProductByPriceIterator<T extends Product>
     extends BaseModelIterator<T> {
-  ProductOrderByDescPriceIterator() : super(index: 0);
+  ProductByPriceIterator() : super();
 
   @override
   T next() {
     T currentModel = listModel[0];
     if (listModel.length == 1) {
-      index = 0;
-      listModel.removeAt(index);
+      listModel.removeAt(0);
       return currentModel;
     }
+    int index = 0;
     for (int i = 1; i < listModel.length; i++) {
       final itemModel = listModel[i];
       if (itemModel.price > currentModel.price) {
@@ -97,13 +97,11 @@ void main() {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
-              final productOrderByDescPriceIterator =
-                  ProductOrderByDescPriceIterator<Product>();
-              productOrderByDescPriceIterator
-                  .setListModel(generatedListProduct);
+              final productByPriceIterator = ProductByPriceIterator<Product>();
+              productByPriceIterator.setListModel(generatedListProduct);
               final listProduct = List<Product>.empty(growable: true);
-              while (productOrderByDescPriceIterator.hasNext()) {
-                listProduct.add(productOrderByDescPriceIterator.next().clone());
+              while (productByPriceIterator.hasNext()) {
+                listProduct.add(productByPriceIterator.next().clone());
               }
               expect(10, listProduct.length);
               expect(

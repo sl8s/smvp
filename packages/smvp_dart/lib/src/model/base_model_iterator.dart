@@ -5,11 +5,7 @@ abstract base class BaseModelIterator<T extends BaseModel> {
   @protected
   List<T> listModel;
 
-  @protected
-  int index;
-
-  BaseModelIterator({required this.index})
-      : listModel = List.empty(growable: true);
+  BaseModelIterator() : listModel = List.empty(growable: true);
 
   T next();
 

@@ -23,7 +23,7 @@ export abstract class BaseArrayModel<T extends BaseModel> {
 
     public abstract toString(): string;
 
-    public sortUsingIterator(baseModelIterator: BaseModelIterator<T>): void {
+    public sort(baseModelIterator: BaseModelIterator<T>): void {
         if(this.arrayModel.length <= 0) {
             return;
         }
@@ -81,11 +81,9 @@ export abstract class BaseArrayModel<T extends BaseModel> {
 
 export abstract class BaseModelIterator<T extends BaseModel> {
     protected arrayModel: Array<T>;
-    protected index: number;
 
-    protected constructor(index: number) {
+    protected constructor() {
         this.arrayModel = new Array<T>();
-        this.index = index;
     }
 
     public abstract next(): T;

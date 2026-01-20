@@ -9,7 +9,7 @@ export declare abstract class BaseArrayModel<T extends BaseModel> {
     abstract clone(): BaseArrayModel<T>;
     abstract toArrayMap(): Array<Record<string, any>>;
     abstract toString(): string;
-    sortUsingIterator(baseModelIterator: BaseModelIterator<T>): void;
+    sort(baseModelIterator: BaseModelIterator<T>): void;
     add(newModel: T): void;
     updateById(newModel: T): void;
     deleteById(id: string): void;
@@ -19,8 +19,7 @@ export declare abstract class BaseArrayModel<T extends BaseModel> {
 }
 export declare abstract class BaseModelIterator<T extends BaseModel> {
     protected arrayModel: Array<T>;
-    protected index: number;
-    protected constructor(index: number);
+    protected constructor();
     abstract next(): T;
     abstract hasNext(): boolean;
     setArrayModel(arrayModel: Array<T>): void;

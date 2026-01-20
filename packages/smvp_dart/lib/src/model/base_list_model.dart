@@ -16,7 +16,7 @@ abstract base class BaseListModel<T extends BaseModel> {
   String toString();
 
   @nonVirtual
-  void sortUsingIterator(BaseModelIterator<T> baseModelIterator) {
+  void sort(BaseModelIterator<T> baseModelIterator) {
     if (listModel.isEmpty) {
       return;
     }

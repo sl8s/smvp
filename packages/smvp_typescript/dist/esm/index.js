@@ -10,7 +10,7 @@ export class BaseArrayModel {
     constructor(arrayModel) {
         this.arrayModel = arrayModel;
     }
-    sortUsingIterator(baseModelIterator) {
+    sort(baseModelIterator) {
         if (this.arrayModel.length <= 0) {
             return;
         }
@@ -61,10 +61,8 @@ export class BaseArrayModel {
 }
 export class BaseModelIterator {
     arrayModel;
-    index;
-    constructor(index) {
+    constructor() {
         this.arrayModel = new Array();
-        this.index = index;
     }
     setArrayModel(arrayModel) {
         this.arrayModel = arrayModel;

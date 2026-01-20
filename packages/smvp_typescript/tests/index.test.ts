@@ -80,27 +80,27 @@ class ArrayProductWrapper extends BaseArrayModelWrapper {
     }
 }
 
-class ProductOrderByDescPriceIterator<T extends Product> extends BaseModelIterator<T> {
+class ProductByPriceIterator<T extends Product> extends BaseModelIterator<T> {
     public constructor() {
-        super(0);
+        super();
     }
 
     public override next(): T {
         let currentModel: T = this.arrayModel[0];
         if (this.arrayModel.length === 1) {
-            this.index = 0;
-            this.arrayModel.splice(this.index,1);
+            this.arrayModel.splice(0,1);
             return currentModel;
         }
+        let index = 0;
         for (let i = 1; i < this.arrayModel.length; i++) {
             const itemModel = this.arrayModel[i];
             if(itemModel.price > currentModel.price) {
                 currentModel = itemModel;
-                this.index = i;
+                index = i;
                 continue;
             }
         }
-        this.arrayModel.splice(this.index,1);
+        this.arrayModel.splice(index,1);
         return currentModel;
     }
 
@@ -181,12 +181,12 @@ describe("BaseArrayModel", () => {
             "ArrayProduct(arrayModel: [\nProduct(id: id0, price: 100),\n])")
             .toEqual(arrayProduct.toString());
     });
-    test("sortUsingIterator(baseModelIterator: BaseModelIterator<T>)", () => {
+    test("sort(baseModelIterator: BaseModelIterator<T>)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        arrayProduct.sortUsingIterator(new ProductOrderByDescPriceIterator());
+        arrayProduct.sort(new ProductByPriceIterator());
         expect(10).toEqual(arrayProduct.arrayModel.length);
         expect(
             [109, 108, 107, 106, 105, 104, 103, 102, 101, 100])
@@ -318,11 +318,11 @@ describe("BaseModelIterator", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
-        const productOrderByDescPriceIterator = new ProductOrderByDescPriceIterator();
-        productOrderByDescPriceIterator.setArrayModel(generatedArrayProduct);
+        const productByPriceIterator = new ProductByPriceIterator();
+        productByPriceIterator.setArrayModel(generatedArrayProduct);
         const arrayProduct = new Array<Product>();
-        while (productOrderByDescPriceIterator.hasNext()) {
-            arrayProduct.push(productOrderByDescPriceIterator.next().clone());
+        while (productByPriceIterator.hasNext()) {
+            arrayProduct.push(productByPriceIterator.next().clone());
         }
         expect(10).toEqual(arrayProduct.length);
         expect(
