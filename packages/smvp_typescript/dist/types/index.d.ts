@@ -9,20 +9,12 @@ export declare abstract class BaseArrayModel<T extends BaseModel> {
     abstract clone(): BaseArrayModel<T>;
     abstract toArrayMap(): Array<Record<string, any>>;
     abstract toString(): string;
-    sort(baseModelIterator: BaseModelIterator<T>): void;
     add(newModel: T): void;
     updateById(newModel: T): void;
     deleteById(id: string): void;
     addFromArray(newArrayModel: Array<T>): void;
     updateFromArrayById(newArrayModel: Array<T>): void;
     deleteFromArrayById(arrayId: Array<string>): void;
-}
-export declare abstract class BaseModelIterator<T extends BaseModel> {
-    protected arrayModel: Array<T>;
-    protected constructor();
-    abstract next(): T;
-    abstract hasNext(): boolean;
-    setArrayModel(arrayModel: Array<T>): void;
 }
 export declare abstract class BaseModelWrapperRepository implements IDispose {
     protected constructor();

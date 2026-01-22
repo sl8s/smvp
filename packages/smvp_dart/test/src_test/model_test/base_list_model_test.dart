@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:smvp_dart/src/model/base_list_model.dart';
 import 'package:smvp_dart/src/model/base_model.dart';
-import 'package:smvp_dart/src/model/base_model_iterator.dart';
 import 'package:test/test.dart';
 
 @immutable
@@ -59,36 +58,6 @@ base class ListProduct<T extends Product> extends BaseListModel<T> {
   }
 }
 
-final class ProductByPriceIterator<T extends Product>
-    extends BaseModelIterator<T> {
-  ProductByPriceIterator() : super();
-
-  @override
-  T next() {
-    T currentModel = listModel[0];
-    if (listModel.length == 1) {
-      listModel.removeAt(0);
-      return currentModel;
-    }
-    int index = 0;
-    for (int i = 1; i < listModel.length; i++) {
-      final itemModel = listModel[i];
-      if (itemModel.price > currentModel.price) {
-        currentModel = itemModel;
-        index = i;
-        continue;
-      }
-    }
-    listModel.removeAt(index);
-    return currentModel;
-  }
-
-  @override
-  bool hasNext() {
-    return listModel.isNotEmpty;
-  }
-}
-
 void main() {
   group(
       "BaseListModel",
@@ -141,28 +110,6 @@ void main() {
               expect(
                   "ListProduct(listModel: [\nProduct(id: id0, price: 100),\n])",
                   listProduct.toString());
-            }),
-            test("sort(BaseModelIterator<T> baseModelIterator)", () {
-              final generatedListProduct = List<Product>.generate(10,
-                  (int index) => Product(id: "id$index", price: (100 + index)),
-                  growable: true);
-              final listProduct = ListProduct(listModel: generatedListProduct);
-              listProduct.sort(ProductByPriceIterator());
-              expect(10, listProduct.listModel.length);
-              expect(
-                  [109, 108, 107, 106, 105, 104, 103, 102, 101, 100],
-                  equals([
-                    listProduct.listModel[0].price,
-                    listProduct.listModel[1].price,
-                    listProduct.listModel[2].price,
-                    listProduct.listModel[3].price,
-                    listProduct.listModel[4].price,
-                    listProduct.listModel[5].price,
-                    listProduct.listModel[6].price,
-                    listProduct.listModel[7].price,
-                    listProduct.listModel[8].price,
-                    listProduct.listModel[9].price
-                  ]));
             }),
             test("add(T newModel)", () {
               final generatedListProduct = List<Product>.generate(10,

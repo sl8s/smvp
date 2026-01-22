@@ -2,7 +2,6 @@ library;
 
 export 'src/model/base_list_model_wrapper.dart';
 export 'src/model/base_list_model.dart';
-export 'src/model/base_model_iterator.dart';
 export 'src/model/base_model_wrapper_repository.dart';
 export 'src/model/base_model_wrapper.dart';
 export 'src/model/base_model.dart';

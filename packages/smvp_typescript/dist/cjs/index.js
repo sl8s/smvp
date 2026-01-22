@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Result = exports.ResultModelWrapper = exports.ResultArrayModelWrapper = exports.NetworkException = exports.LocalException = exports.ExceptionAdapter = exports.EnumGuilty = exports.BaseException = exports.BaseView = exports.ShareService = exports.ShareProxy = exports.IterationService = exports.BaseModel = exports.BaseModelWrapper = exports.BaseModelWrapperRepository = exports.BaseModelIterator = exports.BaseArrayModel = exports.BaseArrayModelWrapper = void 0;
+exports.Result = exports.ResultModelWrapper = exports.ResultArrayModelWrapper = exports.NetworkException = exports.LocalException = exports.ExceptionAdapter = exports.EnumGuilty = exports.BaseException = exports.BaseView = exports.ShareService = exports.ShareProxy = exports.IterationService = exports.BaseModel = exports.BaseModelWrapper = exports.BaseModelWrapperRepository = exports.BaseArrayModel = exports.BaseArrayModelWrapper = void 0;
 exports.debugPrint = debugPrint;
 exports.debugPrintException = debugPrintException;
 exports.debugPrintMethod = debugPrintMethod;
@@ -16,16 +16,6 @@ class BaseArrayModel {
     arrayModel;
     constructor(arrayModel) {
         this.arrayModel = arrayModel;
-    }
-    sort(baseModelIterator) {
-        if (this.arrayModel.length <= 0) {
-            return;
-        }
-        baseModelIterator.setArrayModel(this.arrayModel.map((itemModel) => itemModel.clone()));
-        this.arrayModel.splice(0, this.arrayModel.length);
-        while (baseModelIterator.hasNext()) {
-            this.arrayModel.push(baseModelIterator.next().clone());
-        }
     }
     add(newModel) {
         this.arrayModel.push(newModel);
@@ -67,16 +57,6 @@ class BaseArrayModel {
     }
 }
 exports.BaseArrayModel = BaseArrayModel;
-class BaseModelIterator {
-    arrayModel;
-    constructor() {
-        this.arrayModel = new Array();
-    }
-    setArrayModel(arrayModel) {
-        this.arrayModel = arrayModel;
-    }
-}
-exports.BaseModelIterator = BaseModelIterator;
 class BaseModelWrapperRepository {
     constructor() {
     }

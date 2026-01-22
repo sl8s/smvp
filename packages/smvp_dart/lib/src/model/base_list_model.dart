@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
 import 'package:smvp_dart/src/model/base_model.dart';
-import 'package:smvp_dart/src/model/base_model_iterator.dart';
 
 @immutable
 abstract base class BaseListModel<T extends BaseModel> {
@@ -16,28 +15,15 @@ abstract base class BaseListModel<T extends BaseModel> {
   String toString();
 
   @nonVirtual
-  void sort(BaseModelIterator<T> baseModelIterator) {
-    if (listModel.isEmpty) {
-      return;
-    }
-    baseModelIterator.setListModel(listModel
-        .map((T itemModel) => itemModel.clone() as T)
-        .toList(growable: true));
-    listModel.clear();
-    while (baseModelIterator.hasNext()) {
-      listModel.add(baseModelIterator.next().clone() as T);
-    }
-  }
-
-  @nonVirtual
   void add(T newModel) {
     listModel.add(newModel);
   }
 
   @nonVirtual
   void updateById(T newModel) {
-    final int index =
-        listModel.indexWhere((T itemModel) => itemModel.id == newModel.id);
+    final int index = listModel.indexWhere(
+      (T itemModel) => itemModel.id == newModel.id,
+    );
     if (index == -1) {
       return;
     }
@@ -57,8 +43,9 @@ abstract base class BaseListModel<T extends BaseModel> {
   @nonVirtual
   void updateFromListById(List<T> newListModel) {
     for (final T newItemModel in newListModel) {
-      final int index = listModel
-          .indexWhere((T itemModel) => itemModel.id == newItemModel.id);
+      final int index = listModel.indexWhere(
+        (T itemModel) => itemModel.id == newItemModel.id,
+      );
       if (index == -1) {
         continue;
       }

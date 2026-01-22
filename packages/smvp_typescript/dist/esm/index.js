@@ -10,16 +10,6 @@ export class BaseArrayModel {
     constructor(arrayModel) {
         this.arrayModel = arrayModel;
     }
-    sort(baseModelIterator) {
-        if (this.arrayModel.length <= 0) {
-            return;
-        }
-        baseModelIterator.setArrayModel(this.arrayModel.map((itemModel) => itemModel.clone()));
-        this.arrayModel.splice(0, this.arrayModel.length);
-        while (baseModelIterator.hasNext()) {
-            this.arrayModel.push(baseModelIterator.next().clone());
-        }
-    }
     add(newModel) {
         this.arrayModel.push(newModel);
     }
@@ -57,15 +47,6 @@ export class BaseArrayModel {
             }
             this.arrayModel.splice(index, 1);
         }
-    }
-}
-export class BaseModelIterator {
-    arrayModel;
-    constructor() {
-        this.arrayModel = new Array();
-    }
-    setArrayModel(arrayModel) {
-        this.arrayModel = arrayModel;
     }
 }
 export class BaseModelWrapperRepository {

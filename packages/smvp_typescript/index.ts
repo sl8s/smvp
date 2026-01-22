@@ -23,17 +23,6 @@ export abstract class BaseArrayModel<T extends BaseModel> {
 
     public abstract toString(): string;
 
-    public sort(baseModelIterator: BaseModelIterator<T>): void {
-        if(this.arrayModel.length <= 0) {
-            return;
-        }
-        baseModelIterator.setArrayModel(this.arrayModel.map((itemModel: T) => itemModel.clone() as T));
-        this.arrayModel.splice(0,this.arrayModel.length);
-        while (baseModelIterator.hasNext()) {
-            this.arrayModel.push(baseModelIterator.next().clone() as T);
-        }
-    }
-
     public add(newModel: T): void {
         this.arrayModel.push(newModel);
     }
@@ -76,22 +65,6 @@ export abstract class BaseArrayModel<T extends BaseModel> {
             }
             this.arrayModel.splice(index,1);
         }
-    }
-}
-
-export abstract class BaseModelIterator<T extends BaseModel> {
-    protected arrayModel: Array<T>;
-
-    protected constructor() {
-        this.arrayModel = new Array<T>();
-    }
-
-    public abstract next(): T;
-
-    public abstract hasNext(): boolean;
-
-    public setArrayModel(arrayModel: Array<T>) {
-        this.arrayModel = arrayModel;
     }
 }
 

@@ -1,5 +1,5 @@
 import { vi, expect, test, describe } from "vitest"
-import { BaseArrayModel, BaseArrayModelWrapper, BaseModel, BaseModelIterator, BaseModelWrapper, BaseView, ExceptionAdapter, IterationService, ShareProxy, ShareService } from "..";
+import { BaseArrayModel, BaseArrayModelWrapper, BaseModel, BaseModelWrapper, BaseView, ExceptionAdapter, IterationService, ShareProxy, ShareService } from "..";
 
 class Product extends BaseModel {
     public readonly price: number;
@@ -80,35 +80,6 @@ class ArrayProductWrapper extends BaseArrayModelWrapper {
     }
 }
 
-class ProductByPriceIterator<T extends Product> extends BaseModelIterator<T> {
-    public constructor() {
-        super();
-    }
-
-    public override next(): T {
-        let currentModel: T = this.arrayModel[0];
-        if (this.arrayModel.length === 1) {
-            this.arrayModel.splice(0,1);
-            return currentModel;
-        }
-        let index = 0;
-        for (let i = 1; i < this.arrayModel.length; i++) {
-            const itemModel = this.arrayModel[i];
-            if(itemModel.price > currentModel.price) {
-                currentModel = itemModel;
-                index = i;
-                continue;
-            }
-        }
-        this.arrayModel.splice(index,1);
-        return currentModel;
-    }
-
-    public override hasNext(): boolean {
-        return this.arrayModel.length > 0;
-    }
-}
-
 interface Callback {
     onCallback(data: string): void;
 }
@@ -180,28 +151,6 @@ describe("BaseArrayModel", () => {
         expect(
             "ArrayProduct(arrayModel: [\nProduct(id: id0, price: 100),\n])")
             .toEqual(arrayProduct.toString());
-    });
-    test("sort(baseModelIterator: BaseModelIterator<T>)", () => {
-        const generatedArrayProduct: Array<Product> = Array.from(
-            { length: 10 },
-            (_, index: number) => new Product("id"+index, (100 + index)));
-        const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        arrayProduct.sort(new ProductByPriceIterator());
-        expect(10).toEqual(arrayProduct.arrayModel.length);
-        expect(
-            [109, 108, 107, 106, 105, 104, 103, 102, 101, 100])
-            .toEqual([ 
-                arrayProduct.arrayModel[0].price,
-                arrayProduct.arrayModel[1].price,
-                arrayProduct.arrayModel[2].price,
-                arrayProduct.arrayModel[3].price,
-                arrayProduct.arrayModel[4].price,
-                arrayProduct.arrayModel[5].price,
-                arrayProduct.arrayModel[6].price,
-                arrayProduct.arrayModel[7].price,
-                arrayProduct.arrayModel[8].price,
-                arrayProduct.arrayModel[9].price
-            ]);
     });
     test("add(newModel: T)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
@@ -310,35 +259,6 @@ describe("BaseArrayModelWrapper", () => {
         const arrayProduct = arrayProductWrapper.fromArrayMap();
         expect(10).toEqual(arrayProduct.arrayModel.length);
         expect("id5").toEqual(arrayProduct.arrayModel[5].id);
-    });
-});
-
-describe("BaseModelIterator", () => {
-    test("next(), hasNext(), setArrayModel(arrayModel: Array<T>)", () => {
-        const generatedArrayProduct: Array<Product> = Array.from(
-            { length: 10 },
-            (_, index: number) => new Product("id"+index, (100 + index)));
-        const productByPriceIterator = new ProductByPriceIterator();
-        productByPriceIterator.setArrayModel(generatedArrayProduct);
-        const arrayProduct = new Array<Product>();
-        while (productByPriceIterator.hasNext()) {
-            arrayProduct.push(productByPriceIterator.next().clone());
-        }
-        expect(10).toEqual(arrayProduct.length);
-        expect(
-            [109, 108, 107, 106, 105, 104, 103, 102, 101, 100])
-            .toEqual([
-                arrayProduct[0].price,
-                arrayProduct[1].price,
-                arrayProduct[2].price,
-                arrayProduct[3].price,
-                arrayProduct[4].price,
-                arrayProduct[5].price,
-                arrayProduct[6].price,
-                arrayProduct[7].price,
-                arrayProduct[8].price,
-                arrayProduct[9].price
-            ]);
     });
 });
 
