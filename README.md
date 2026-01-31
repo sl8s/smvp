@@ -8,7 +8,7 @@
 - This is what it should look like in the `package.json` file:
 ```json
 "dependencies": {
-  "smvp_typescript": "https://github.com/sl8s/smvp/releases/download/v1.0.7/smvp_typescript_v1_0_4.tgz"
+  "smvp_typescript": "https://github.com/sl8s/smvp/releases/download/v1.0.8/smvp_typescript_v1_0_5.tgz"
 }
 ```
 
