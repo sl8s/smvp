@@ -74,11 +74,11 @@ export abstract class BaseModelWrapperRepository implements IDispose {
     
     public abstract dispose(): void;
 
-    protected getSafeValue<T>(map: Record<string,any>, key: string, defaultValue: T): T {
-        if(!map.has(key)) {
-            return defaultValue;
+    protected getSafeValue<T>(map: Map<string,any> | Record<string,any>, key: string, defaultValue: T): T {
+        if (map instanceof Map) {
+            return map.has(key) ? map.get(key) : defaultValue;
         }
-        return map.get(key);
+        return map[key] ?? defaultValue;
     }
 }
 

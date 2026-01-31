@@ -53,10 +53,10 @@ export class BaseModelWrapperRepository {
     constructor() {
     }
     getSafeValue(map, key, defaultValue) {
-        if (!map.has(key)) {
-            return defaultValue;
+        if (map instanceof Map) {
+            return map.has(key) ? map.get(key) : defaultValue;
         }
-        return map.get(key);
+        return map[key] ?? defaultValue;
     }
 }
 export class BaseModelWrapper {

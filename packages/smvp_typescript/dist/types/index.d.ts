@@ -19,7 +19,7 @@ export declare abstract class BaseArrayModel<T extends BaseModel> {
 export declare abstract class BaseModelWrapperRepository implements IDispose {
     protected constructor();
     abstract dispose(): void;
-    protected getSafeValue<T>(map: Record<string, any>, key: string, defaultValue: T): T;
+    protected getSafeValue<T>(map: Map<string, any> | Record<string, any>, key: string, defaultValue: T): T;
 }
 export declare abstract class BaseModelWrapper {
     protected readonly map: Record<string, any>;
