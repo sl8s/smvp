@@ -1,6 +1,7 @@
 {
   "name": "smvp_typescript",
-  "version": "1.0.5",
+  "version": "1.0.6",
+  "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -16,7 +17,7 @@
     }
   },
   "scripts": {
-    "download": "npm install .",
+    "download": "npm install",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
     "build:types": "tsc -p tsconfig.types.json",
