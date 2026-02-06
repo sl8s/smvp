@@ -115,7 +115,7 @@ class JsonipWrapperRepository<T extends JsonipWrapper, Y extends ArrayJsonipWrap
                     "Content-Type": "application/json"
                 }
             });
-            if(response.status != 200) {
+            if(response.status !== 200) {
                 throw NetworkException.fromSourceAndKeyAndStatusCode(
                     "JsonipWrapperRepository",
                     response.status.toString(),
