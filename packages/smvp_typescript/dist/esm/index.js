@@ -56,7 +56,7 @@ export class BaseModelWrapperRepository {
         if (map instanceof Map) {
             return map.has(key) ? map.get(key) : defaultValue;
         }
-        return map[key] ?? defaultValue;
+        return (key in map) ? map[key] : defaultValue;
     }
 }
 export class BaseModelWrapper {
