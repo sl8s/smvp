@@ -1,4 +1,4 @@
-import { vi, expect, test, describe } from "vitest"
+import { describe, expect, test, vi } from "vitest";
 import { BaseArrayModel, BaseArrayModelWrapper, BaseModel, BaseModelWrapper, BaseView, ExceptionAdapter, IterationService, ShareProxy, ShareService } from "..";
 
 class Product extends BaseModel {
@@ -115,10 +115,10 @@ describe("BaseArrayModel", () => {
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
         const cloneArrayProduct = arrayProduct.clone();
-        expect(true).toEqual(arrayProduct.arrayModel.length === cloneArrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length === cloneArrayProduct.arrayModel.length).toEqual(true);
         cloneArrayProduct.arrayModel.splice(0,1);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
-        expect(9).toEqual(cloneArrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
+        expect(cloneArrayProduct.arrayModel.length).toEqual(9);
     });
     test("toArrayMap()", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
@@ -126,11 +126,10 @@ describe("BaseArrayModel", () => {
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
         const arrayMapFromArrayProduct = arrayProduct.toArrayMap();
-        expect(true).toEqual(arrayProduct.arrayModel.length === arrayMapFromArrayProduct.length);
-        expect(10).toEqual(arrayMapFromArrayProduct.length);
+        expect(arrayProduct.arrayModel.length === arrayMapFromArrayProduct.length).toEqual(true);
+        expect(arrayMapFromArrayProduct.length).toEqual(10);
         expect(
-            [100, 101, 102, 103, 104, 105, 106, 107, 108, 109])
-            .toEqual([ 
+            [
                 arrayMapFromArrayProduct[0]["price"],
                 arrayMapFromArrayProduct[1]["price"],
                 arrayMapFromArrayProduct[2]["price"],
@@ -141,72 +140,68 @@ describe("BaseArrayModel", () => {
                 arrayMapFromArrayProduct[7]["price"],
                 arrayMapFromArrayProduct[8]["price"],
                 arrayMapFromArrayProduct[9]["price"],
-            ]);
+            ]).toEqual([100, 101, 102, 103, 104, 105, 106, 107, 108, 109]);
     });
     test("toString()", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 1 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(
-            "ArrayProduct(arrayModel: [\nProduct(id: id0, price: 100),\n])")
-            .toEqual(arrayProduct.toString());
+        expect(arrayProduct.toString()).toEqual("ArrayProduct(arrayModel: [\nProduct(id: id0, price: 100),\n])");
     });
     test("add(newModel: T)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
         arrayProduct.add(new Product("id124", 5314));
-        expect(11).toEqual(arrayProduct.arrayModel.length);
-        expect("id124").toEqual(arrayProduct.arrayModel[10].id);
-        expect(5314).toEqual(arrayProduct.arrayModel[10].price);
+        expect(arrayProduct.arrayModel.length).toEqual(11);
+        expect(arrayProduct.arrayModel[10].id).toEqual("id124");
+        expect(arrayProduct.arrayModel[10].price).toEqual(5314);
     });
     test("updateById(newModel: T)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
-        expect(100).toEqual(arrayProduct.arrayModel[0].price);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
+        expect(arrayProduct.arrayModel[0].price).toEqual(100);
         arrayProduct.updateById(new Product("id0", 5314));
-        expect(5314).toEqual(arrayProduct.arrayModel[0].price);
+        expect(arrayProduct.arrayModel[0].price).toEqual(5314);
     });
     test("deleteById(id: string)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
         arrayProduct.deleteById("id0");
-        expect(9).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(9);
         expect(
-            ["id1", 101])
-            .toEqual([
-                arrayProduct.arrayModel[0].id, 
+            [
+                arrayProduct.arrayModel[0].id,
                 arrayProduct.arrayModel[0].price
-            ]);
+            ]).toEqual(["id1", 101]);
     });
     test("addFromArray(newArrayModel: Array<T>)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
         arrayProduct.addFromArray([
             new Product("id425", 93125),
             new Product("id643", 24112)
         ]);
-        expect(12).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(12);
         expect(
-            ["id425", "id643", 93125, 24112])
-            .toEqual([
+            [
                 arrayProduct.arrayModel[10].id, 
                 arrayProduct.arrayModel[11].id, 
                 arrayProduct.arrayModel[10].price,
                 arrayProduct.arrayModel[11].price
-            ]);
+            ]).toEqual(["id425", "id643", 93125, 24112]);
     });
     test("updateFromArrayById(newArrayModel: Array<T>)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
@@ -215,38 +210,35 @@ describe("BaseArrayModel", () => {
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
         expect(10).toEqual(arrayProduct.arrayModel.length);
         expect(
-            [100, 101])
-            .toEqual([
+            [
                 arrayProduct.arrayModel[0].price,
                 arrayProduct.arrayModel[1].price
-            ]);
+            ]).toEqual([100, 101]);
         arrayProduct.updateFromArrayById([
             new Product("id0", 93125),
             new Product("id1", 24112)
         ]);
         expect(
-            [93125, 24112])
-            .toEqual([
+            [
                 arrayProduct.arrayModel[0].price,
                 arrayProduct.arrayModel[1].price
-            ]);
+            ]).toEqual([93125, 24112]);
     });
     test("deleteFromArrayById(arrayId: Array<string>)", () => {
         const generatedArrayProduct: Array<Product> = Array.from(
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
         arrayProduct.deleteFromArrayById(["id0","id1"]);
-        expect(8).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(8);
         expect(
-            ["id2", 102, "id3", 103])
-            .toEqual([
+            [
                 arrayProduct.arrayModel[0].id,
                 arrayProduct.arrayModel[0].price,
                 arrayProduct.arrayModel[1].id,
                 arrayProduct.arrayModel[1].price,
-            ]);
+            ]).toEqual(["id2", 102, "id3", 103]);
     });
 });
   
@@ -257,8 +249,8 @@ describe("BaseArrayModelWrapper", () => {
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProductWrapper = new ArrayProductWrapper(generatedArrayProduct);
         const arrayProduct = arrayProductWrapper.fromArrayMap();
-        expect(10).toEqual(arrayProduct.arrayModel.length);
-        expect("id5").toEqual(arrayProduct.arrayModel[5].id);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
+        expect(arrayProduct.arrayModel[5].id).toEqual("id5");
     });
 });
 
@@ -266,15 +258,15 @@ describe("BaseModel", () => {
     test("clone()", () => {
         const product = new Product("id1",100);
         const cloneProduct = product.clone();
-        expect(true).toEqual(product.id === cloneProduct.id);
+        expect(product.id === cloneProduct.id).toEqual(true);
     });
     test("toMap()", () => {
         const product = new Product("id1",100);
-        expect({"id": "id1", "price": 100}).toEqual(product.toMap());
+        expect(product.toMap()).toEqual({"id": "id1", "price": 100});
     });
     test("toString()", () => {
         const product = new Product("id1",100);
-        expect("Product(id: id1, price: 100)").toEqual(product.toString());
+        expect(product.toString()).toEqual("Product(id: id1, price: 100)");
     });
 });
 
@@ -284,10 +276,10 @@ describe("BaseModelWrapper", () => {
         const productWrapper = new ProductWrapper(map);
         const product: Product = productWrapper.fromMap();
         expect(
-            ["id1", 100])
-            .toEqual([
+            [
                 product.id, 
-                product.price]);
+                product.price
+            ]).toEqual(["id1", 100]);
     });
 });
 
@@ -296,27 +288,27 @@ describe("IterationService", () => {
         const iterationService = IterationService.instance;
         const id = iterationService.next();
         const idSecond = iterationService.next();
-        expect(true).toEqual(id !== idSecond);
+        expect(id !== idSecond).toEqual(true);
     });
 });
 
 describe("ShareProxy", () => {
     test("getValue<T>(key: string, defaultValue: T)", () => {
         const shareProxy = new ShareProxy();
-        expect("qwerty").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+        expect(shareProxy.getValue<string>("key", "qwerty")).toEqual("qwerty");
         shareProxy.update("key","ytrewq");
-        expect("ytrewq").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+        expect(shareProxy.getValue<string>("key", "qwerty")).toEqual("ytrewq");
     });
     test("update(key: string, value: any)", () => {
         const shareProxy = new ShareProxy();
         shareProxy.update("key","ytrewq");
-        expect("ytrewq").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+        expect(shareProxy.getValue<string>("key", "qwerty")).toEqual("ytrewq");
     });
     test("delete(key: string)", () => {
         const shareProxy = new ShareProxy();
         shareProxy.update("key","ytrewq");
         shareProxy.delete("key");
-        expect("qwerty").toEqual(shareProxy.getValue<string>("key", "qwerty"));
+        expect(shareProxy.getValue<string>("key", "qwerty")).toEqual("qwerty");
     });
     test("addListener(key: string, callback: (event: any) => void), notifyListener(key: string, value: any)", () => {
         const mockCallback = new MockCallback();
@@ -430,20 +422,20 @@ describe("ShareProxy", () => {
 describe("ShareService", () => {
     test("getValue<T>(key: string, defaultValue: T)", () => {
         const shareService = ShareService.instance;
-        expect("qwerty").toEqual(shareService.getValue<string>("key", "qwerty"));
+        expect(shareService.getValue<string>("key", "qwerty")).toEqual("qwerty");
         shareService.update("key","ytrewq");
-        expect("ytrewq").toEqual(shareService.getValue<string>("key", "qwerty"));
+        expect(shareService.getValue<string>("key", "qwerty")).toEqual("ytrewq");
     });
     test("update(key: string, value: any)", () => {
         const shareService = ShareService.instance;
         shareService.update("key","ytrewq");
-        expect("ytrewq").toEqual(shareService.getValue<string>("key", "qwerty"));
+        expect(shareService.getValue<string>("key", "qwerty")).toEqual("ytrewq");
     });
     test("delete(key: string)", () => {
         const shareService = ShareService.instance;
         shareService.update("key","ytrewq");
         shareService.delete("key");
-        expect("qwerty").toEqual(shareService.getValue<string>("key", "qwerty"));
+        expect(shareService.getValue<string>("key", "qwerty")).toEqual("qwerty");
     });
     test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListener(key: string, listenerId: string, value: any)", () => {
         const mockCallback = new MockCallback();
@@ -555,17 +547,17 @@ describe("ShareService", () => {
 describe("BaseView", () => {
     test("getViewState()", () => {
         const mainView = new MainView();
-        expect(EnumMainView.success).toEqual(mainView.getViewState());
+        expect(mainView.getViewState()).toEqual(EnumMainView.success);
     });
 });
 
 describe("ExceptionAdapter", () => {
     test("getKey()", () => {
         const exceptionAdapter = new ExceptionAdapter(null);
-        expect("").toEqual(exceptionAdapter.getKey());
+        expect(exceptionAdapter.getKey()).toEqual("");
     });
     test("hasException()", () => {
         const exceptionAdapter = new ExceptionAdapter(null);
-        expect(false).toEqual(exceptionAdapter.hasException());
+        expect(exceptionAdapter.hasException()).toEqual(false);
     });
 });
