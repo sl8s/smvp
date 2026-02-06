@@ -40,7 +40,7 @@ void main() {
             test("fromMap()", () {
               final Map<String, dynamic> map = {"id": "id1"};
               final userWrapper = UserWrapper(map: map);
-              expect("id1", userWrapper.fromMap().id);
+              expect(userWrapper.fromMap().id, "id1");
             })
           });
 }

@@ -14,20 +14,20 @@ void main() {
       () => {
             test("getValue<T>(String key, T defaultValue)", () {
               final shareService = ShareService.instance;
-              expect("qwerty", shareService.getValue<String>("key", "qwerty"));
+              expect(shareService.getValue<String>("key", "qwerty"), "qwerty");
               shareService.update("key", "ytrewq");
-              expect("ytrewq", shareService.getValue<String>("key", "qwerty"));
+              expect(shareService.getValue<String>("key", "qwerty"), "ytrewq");
             }),
             test("update(String key, dynamic value)", () {
               final shareService = ShareService.instance;
               shareService.update("key", "ytrewq");
-              expect("ytrewq", shareService.getValue<String>("key", "qwerty"));
+              expect(shareService.getValue<String>("key", "qwerty"), "ytrewq");
             }),
             test("delete(String key)", () {
               final shareService = ShareService.instance;
               shareService.update("key", "ytrewq");
               shareService.delete("key");
-              expect("qwerty", shareService.getValue<String>("key", "qwerty"));
+              expect(shareService.getValue<String>("key", "qwerty"), "qwerty");
             }),
             test(
                 "addListener(String key, String listenerId, void Function(dynamic event) callback), "
@@ -100,7 +100,8 @@ void main() {
             test(
                 "addListener(String key, String listenerId, void Function(dynamic event) callback), "
                 "notifyListeners(String key, dynamic value), "
-                "deleteListenerByListenerId(String key, String listenerId)", () {
+                "deleteListenerByListenerId(String key, String listenerId)",
+                () {
               final mockCallback = MockCallback();
               final shareService = ShareService.instance;
               shareService.addListener("key", "8", (event) {
