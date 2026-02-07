@@ -8,7 +8,7 @@
 - This is what it should look like in the `package.json` file:
 ```json
 "dependencies": {
-  "smvp_typescript": "https://github.com/sl8s/smvp/releases/download/v1.0.9/smvp_typescript_v1_0_6.tgz"
+  "smvp_typescript": "https://github.com/sl8s/smvp/releases/download/v1.1.0/smvp_typescript_v1_0_7.tgz"
 }
 ```
 
@@ -20,7 +20,7 @@ dependencies:
   smvp_dart:
     git:
       url: https://github.com/sl8s/smvp.git
-      ref: v1.0.9
+      ref: v1.1.0
       path: packages/smvp_dart
 ```
 
