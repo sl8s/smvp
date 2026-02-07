@@ -22,7 +22,7 @@ void main() {
       () => {
             test("getViewState()", () {
               final mainView = MainView();
-              expect(mainView.getViewState(), EnumMainView.success);
+              expect(mainView.getViewState(), equals(EnumMainView.success));
             }),
           });
 }

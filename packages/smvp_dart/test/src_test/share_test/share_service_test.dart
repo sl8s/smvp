@@ -14,20 +14,24 @@ void main() {
       () => {
             test("getValue<T>(String key, T defaultValue)", () {
               final shareService = ShareService.instance;
-              expect(shareService.getValue<String>("key", "qwerty"), "qwerty");
+              expect(shareService.getValue<String>("key", "qwerty"),
+                  equals("qwerty"));
               shareService.update("key", "ytrewq");
-              expect(shareService.getValue<String>("key", "qwerty"), "ytrewq");
+              expect(shareService.getValue<String>("key", "qwerty"),
+                  equals("ytrewq"));
             }),
             test("update(String key, dynamic value)", () {
               final shareService = ShareService.instance;
               shareService.update("key", "ytrewq");
-              expect(shareService.getValue<String>("key", "qwerty"), "ytrewq");
+              expect(shareService.getValue<String>("key", "qwerty"),
+                  equals("ytrewq"));
             }),
             test("delete(String key)", () {
               final shareService = ShareService.instance;
               shareService.update("key", "ytrewq");
               shareService.delete("key");
-              expect(shareService.getValue<String>("key", "qwerty"), "qwerty");
+              expect(shareService.getValue<String>("key", "qwerty"),
+                  equals("qwerty"));
             }),
             test(
                 "addListener(String key, String listenerId, void Function(dynamic event) callback), "

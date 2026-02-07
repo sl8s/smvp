@@ -71,10 +71,10 @@ void main() {
               expect(
                   listProduct.listModel.length ==
                       cloneListProduct.listModel.length,
-                  true);
+                  equals(true));
               cloneListProduct.listModel.removeAt(0);
-              expect(listProduct.listModel.length, 10);
-              expect(cloneListProduct.listModel.length, 9);
+              expect(listProduct.listModel.length, equals(10));
+              expect(cloneListProduct.listModel.length, equals(9));
             }),
             test("toListMap()", () {
               final generatedListProduct = List<Product>.generate(10,
@@ -84,8 +84,8 @@ void main() {
               final listMapFromListProduct = listProduct.toListMap();
               expect(
                   listProduct.listModel.length == listMapFromListProduct.length,
-                  true);
-              expect(listMapFromListProduct.length, 10);
+                  equals(true));
+              expect(listMapFromListProduct.length, equals(10));
               expect([
                 listMapFromListProduct[0]["price"],
                 listMapFromListProduct[1]["price"],
@@ -104,78 +104,72 @@ void main() {
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(listProduct.toString(),
-                  "ListProduct(listModel: [\nProduct(id: id0, price: 100),\n])");
+              expect(
+                  listProduct.toString(),
+                  equals(
+                      "ListProduct(listModel: [\nProduct(id: id0, price: 100),\n])"));
             }),
             test("add(T newModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(listProduct.listModel.length, 10);
+              expect(listProduct.listModel.length, equals(10));
               listProduct.add(Product(id: "id124", price: 5314));
-              expect(listProduct.listModel.length, 11);
-              expect(listProduct.listModel[10].id, "id124");
-              expect(listProduct.listModel[10].price, 5314);
+              expect(listProduct.listModel.length, equals(11));
+              expect(listProduct.listModel[10].id, equals("id124"));
+              expect(listProduct.listModel[10].price, equals(5314));
             }),
             test("updateById(T newModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(listProduct.listModel.length, 10);
-              expect(listProduct.listModel[0].price, 100);
+              expect(listProduct.listModel.length, equals(10));
+              expect(listProduct.listModel[0].price, equals(100));
               listProduct.updateById(Product(id: "id0", price: 5314));
-              expect(listProduct.listModel[0].price, 5314);
+              expect(listProduct.listModel[0].price, equals(5314));
             }),
             test("deleteById(String id)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(listProduct.listModel.length, 10);
+              expect(listProduct.listModel.length, equals(10));
               listProduct.deleteById("id0");
-              expect(listProduct.listModel.length, 9);
+              expect(listProduct.listModel.length, equals(9));
               expect(
                   [listProduct.listModel[0].id, listProduct.listModel[0].price],
-                  ["id1", 101]);
+                  equals(["id1", 101]));
             }),
             test("addFromList(List<T> newListModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(10, listProduct.listModel.length);
+              expect(listProduct.listModel.length, equals(10));
               listProduct.addFromList([
                 Product(id: "id425", price: 93125),
                 Product(id: "id643", price: 24112)
               ]);
-              expect(listProduct.listModel.length, 12);
+              expect(listProduct.listModel.length, equals(12));
               expect([
                 listProduct.listModel[10].id,
                 listProduct.listModel[11].id,
                 listProduct.listModel[10].price,
                 listProduct.listModel[11].price
-              ], [
-                "id425",
-                "id643",
-                93125,
-                24112
-              ]);
+              ], equals(["id425", "id643", 93125, 24112]));
             }),
             test("updateFromListById(List<T> newListModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(listProduct.listModel.length, 10);
+              expect(listProduct.listModel.length, equals(10));
               expect([
                 listProduct.listModel[0].price,
                 listProduct.listModel[1].price
-              ], [
-                100,
-                101
-              ]);
+              ], equals([100, 101]));
               listProduct.updateFromListById([
                 Product(id: "id0", price: 93125),
                 Product(id: "id1", price: 24112)
@@ -183,30 +177,22 @@ void main() {
               expect([
                 listProduct.listModel[0].price,
                 listProduct.listModel[1].price
-              ], [
-                93125,
-                24112
-              ]);
+              ], equals([93125, 24112]));
             }),
             test("deleteFromListById(List<String> listId)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
                   growable: true);
               final listProduct = ListProduct(listModel: generatedListProduct);
-              expect(listProduct.listModel.length, 10);
+              expect(listProduct.listModel.length, equals(10));
               listProduct.deleteFromListById(["id0", "id1"]);
-              expect(listProduct.listModel.length, 8);
+              expect(listProduct.listModel.length, equals(8));
               expect([
                 listProduct.listModel[0].id,
                 listProduct.listModel[0].price,
                 listProduct.listModel[1].id,
                 listProduct.listModel[1].price
-              ], [
-                "id2",
-                102,
-                "id3",
-                103
-              ]);
+              ], equals(["id2", 102, "id3", 103]));
             }),
           });
 }

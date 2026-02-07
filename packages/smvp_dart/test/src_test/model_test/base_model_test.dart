@@ -29,15 +29,15 @@ void main() {
             test("clone()", () {
               final user = User(id: "id1");
               final cloneUser = user.clone();
-              expect(user.id == cloneUser.id, true);
+              expect(user.id == cloneUser.id, equals(true));
             }),
             test("toMap()", () {
               final user = User(id: "id1");
-              expect(user.toMap(), {"id": "id1"});
+              expect(user.toMap(), equals({"id": "id1"}));
             }),
             test("toString()", () {
               final user = User(id: "id1");
-              expect(user.toString(), "User(id: id1)");
+              expect(user.toString(), equals("User(id: id1)"));
             })
           });
 }

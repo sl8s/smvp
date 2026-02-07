@@ -7,11 +7,11 @@ void main() {
       () => {
             test("getKey()", () {
               final exceptionAdapter = ExceptionAdapter(null);
-              expect(exceptionAdapter.getKey(), "");
+              expect(exceptionAdapter.getKey(), equals(""));
             }),
             test("hasException()", () {
               final exceptionAdapter = ExceptionAdapter(null);
-              expect(exceptionAdapter.hasException(), false);
+              expect(exceptionAdapter.hasException(), equals(false));
             }),
           });
 }

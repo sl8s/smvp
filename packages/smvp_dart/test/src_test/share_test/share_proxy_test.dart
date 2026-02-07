@@ -14,20 +14,24 @@ void main() {
       () => {
             test("getValue<T>(String key, T defaultValue)", () {
               final shareProxy = ShareProxy();
-              expect(shareProxy.getValue<String>("key", "qwerty"), "qwerty");
+              expect(shareProxy.getValue<String>("key", "qwerty"),
+                  equals("qwerty"));
               shareProxy.update("key", "ytrewq");
-              expect(shareProxy.getValue<String>("key", "qwerty"), "ytrewq");
+              expect(shareProxy.getValue<String>("key", "qwerty"),
+                  equals("ytrewq"));
             }),
             test("update(String key, dynamic value)", () {
               final shareProxy = ShareProxy();
               shareProxy.update("key", "ytrewq");
-              expect(shareProxy.getValue<String>("key", "qwerty"), "ytrewq");
+              expect(shareProxy.getValue<String>("key", "qwerty"),
+                  equals("ytrewq"));
             }),
             test("delete(String key)", () {
               final shareProxy = ShareProxy();
               shareProxy.update("key", "ytrewq");
               shareProxy.delete("key");
-              expect(shareProxy.getValue<String>("key", "qwerty"), "qwerty");
+              expect(shareProxy.getValue<String>("key", "qwerty"),
+                  equals("qwerty"));
             }),
             test(
                 "addListener(String key, void Function(dynamic event) callback), "

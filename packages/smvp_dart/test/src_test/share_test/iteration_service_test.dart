@@ -9,7 +9,7 @@ void main() {
               final iterationService = IterationService.instance;
               final id = iterationService.next();
               final idSecond = iterationService.next();
-              expect(id != idSecond, true);
+              expect(id != idSecond, equals(true));
             }),
           });
 }

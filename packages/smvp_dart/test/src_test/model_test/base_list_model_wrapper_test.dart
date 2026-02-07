@@ -93,8 +93,8 @@ void main() {
               final listUserWrapper =
                   ListUserWrapper(listMap: generatedListMap);
               final ListUser listUser = listUserWrapper.fromListMap();
-              expect(listUser.listModel.length, 10);
-              expect(listUser.listModel[5].id, "id5");
+              expect(listUser.listModel.length, equals(10));
+              expect(listUser.listModel[5].id, equals("id5"));
             })
           });
 }
