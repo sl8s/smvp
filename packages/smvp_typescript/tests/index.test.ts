@@ -208,7 +208,7 @@ describe("BaseArrayModel", () => {
             { length: 10 },
             (_, index: number) => new Product("id"+index, (100 + index)));
         const arrayProduct = new ArrayProduct(generatedArrayProduct);
-        expect(10).toEqual(arrayProduct.arrayModel.length);
+        expect(arrayProduct.arrayModel.length).toEqual(10);
         expect(
             [
                 arrayProduct.arrayModel[0].price,
