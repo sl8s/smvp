@@ -1,6 +1,6 @@
 {
   "name": "smvp_typescript",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -23,7 +23,7 @@
     "build:types": "tsc -p tsconfig.types.json",
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
     "test": "npx vitest run",
-    "dry_pack": "npm pack --dry-run",
+    "drypack": "npm pack --dry-run",
     "pack": "npm pack"
   },
   "dependencies": {
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.8"
   },
   "license": "MIT",
   "files": [
@@ -40,7 +40,6 @@
     "tests/",
     ".gitignore",
     "index.ts",
-    "LICENSE",
     "tsconfig.base.json",
     "tsconfig.cjs.json",
     "tsconfig.esm.json",
