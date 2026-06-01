@@ -310,7 +310,7 @@ describe("ShareProxy", () => {
         shareProxy.delete("key");
         expect(shareProxy.getValue<string>("key", "qwerty")).toEqual("qwerty");
     });
-    test("addListener(key: string, callback: (event: any) => void), notifyListener(key: string, value: any)", () => {
+    test("addListener(key: string, callback: (event: any) => void)", () => {
         const mockCallback = new MockCallback();
         const shareProxy = new ShareProxy();
         shareProxy.addListener("key", (event: string) => {
@@ -320,7 +320,7 @@ describe("ShareProxy", () => {
         expect(mockCallback.onCallback).toHaveBeenCalledTimes(1);
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
     });
-    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any)", () => {
+    test("notifyListeners(key: string, value: any)", () => {
         const mockCallback = new MockCallback();
         const shareProxy = new ShareProxy();
         const secondShareProxy = new ShareProxy();
@@ -335,7 +335,7 @@ describe("ShareProxy", () => {
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
     });
-    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByKey(key: string)", () => {
+    test("deleteAllListenersByKey(key: string)", () => {
         const mockCallback = new MockCallback();
         const shareProxy = new ShareProxy();
         const secondShareProxy = new ShareProxy();
@@ -349,7 +349,7 @@ describe("ShareProxy", () => {
         shareProxy.notifyListeners("key", "hello");
         expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
     });
-    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByArrayKey(arrayKey: Array<string>)", () => {
+    test("deleteAllListenersByArrayKey(arrayKey: Array<string>)", () => {
         const mockCallback = new MockCallback();
         const shareProxy = new ShareProxy();
         const secondShareProxy = new ShareProxy();
@@ -370,7 +370,7 @@ describe("ShareProxy", () => {
         shareProxy.notifyListeners("keyTwo", "hello");
         expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
     });
-    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenerByListenerId(key: string)", () => {
+    test("deleteListenerByListenerId(key: string)", () => {
         const mockCallback = new MockCallback();
         const shareProxy = new ShareProxy();
         const secondShareProxy = new ShareProxy();
@@ -394,7 +394,7 @@ describe("ShareProxy", () => {
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(3,"hello");
     });
-    test("addListener(key: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenersByListenerId(arrayKey: Array<string>)", () => {
+    test("deleteListenersByListenerId(arrayKey: Array<string>)", () => {
         const mockCallback = new MockCallback();
         const shareProxy = new ShareProxy();
         const secondShareProxy = new ShareProxy();
@@ -437,7 +437,7 @@ describe("ShareService", () => {
         shareService.delete("key");
         expect(shareService.getValue<string>("key", "qwerty")).toEqual("qwerty");
     });
-    test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListener(key: string, listenerId: string, value: any)", () => {
+    test("addListener(key: string, listenerId: string, callback: (event: any) => void)", () => {
         const mockCallback = new MockCallback();
         const shareService = ShareService.instance;
         shareService.addListener("key", "0", (event: string) => {
@@ -450,7 +450,7 @@ describe("ShareService", () => {
         expect(mockCallback.onCallback).toHaveBeenCalledTimes(1);
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
     });
-    test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListeners(key: string, value: any)", () => {
+    test("notifyListeners(key: string, value: any)", () => {
         const mockCallback = new MockCallback();
         const shareService = ShareService.instance;
         shareService.addListener("key", "2", (event: string) => {
@@ -464,7 +464,7 @@ describe("ShareService", () => {
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(1,"hello");
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
     });
-    test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByKey(key: string)", () => {
+    test("deleteAllListenersByKey(key: string)", () => {
         const mockCallback = new MockCallback();
         const shareService = ShareService.instance;
         shareService.addListener("key", "4", (event: string) => {
@@ -477,7 +477,7 @@ describe("ShareService", () => {
         shareService.notifyListeners("key", "hello");
         expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
     });
-    test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteAllListenersByArrayKey(arrayKey: Array<string>)", () => {
+    test("deleteAllListenersByArrayKey(arrayKey: Array<string>)", () => {
         const mockCallback = new MockCallback();
         const shareService = ShareService.instance;
         shareService.addListener("key", "6", (event: string) => {
@@ -497,7 +497,7 @@ describe("ShareService", () => {
         shareService.notifyListeners("keyTwo", "hello");
         expect(mockCallback.onCallback).toHaveBeenCalledTimes(0);
     });
-    test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenerByListenerId(key: string, listenerId: string)", () => {
+    test("deleteListenerByListenerId(key: string, listenerId: string)", () => {
         const mockCallback = new MockCallback();
         const shareService = ShareService.instance;
         shareService.addListener("key", "8", (event: string) => {
@@ -520,7 +520,7 @@ describe("ShareService", () => {
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(2,"hello");
         expect(mockCallback.onCallback).toHaveBeenNthCalledWith(3,"hello");
     });
-    test("addListener(key: string, listenerId: string, callback: (event: any) => void), notifyListeners(key: string, value: any), deleteListenersByListenerId(arrayKey: Array<string>, listenerId: string)", () => {
+    test("deleteListenersByListenerId(arrayKey: Array<string>, listenerId: string)", () => {
         const mockCallback = new MockCallback();
         const shareService = ShareService.instance;
         shareService.addListener("key", "55", (event: string) => {
