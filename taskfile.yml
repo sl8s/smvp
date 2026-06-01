@@ -38,15 +38,16 @@ tasks:
   npm:build:
     dir: "{{.smvp_typescript_directory}}"
     cmds:
+      - rm -rf dist/
       - npm run build
   npm:test:
     dir: "{{.smvp_typescript_directory}}"
     cmds:
       - npm run test
-  npm:dry_pack:
+  npm:drypack:
     dir: "{{.smvp_typescript_directory}}"
     cmds:
-      - npm run dry_pack
+      - npm run drypack
   npm:pack:
     dir: "{{.smvp_typescript_directory}}"
     cmds:
