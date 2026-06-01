@@ -85,7 +85,7 @@ base class ListUserWrapper extends BaseListModelWrapper {
 void main() {
   group(
       "BaseListModelWrapper",
-      () => {
+      () {
             test("fromListMap()", () {
               final generatedListMap = List<Map<String, dynamic>>.generate(
                   10, (int index) => {"id": "id$index"},
@@ -95,6 +95,6 @@ void main() {
               final ListUser listUser = listUserWrapper.fromListMap();
               expect(listUser.listModel.length, equals(10));
               expect(listUser.listModel[5].id, equals("id5"));
-            })
+            });
           });
 }

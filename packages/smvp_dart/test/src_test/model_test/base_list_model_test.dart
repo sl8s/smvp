@@ -61,7 +61,7 @@ base class ListProduct<T extends Product> extends BaseListModel<T> {
 void main() {
   group(
       "BaseListModel",
-      () => {
+      () {
             test("clone()", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -75,7 +75,7 @@ void main() {
               cloneListProduct.listModel.removeAt(0);
               expect(listProduct.listModel.length, equals(10));
               expect(cloneListProduct.listModel.length, equals(9));
-            }),
+            });
             test("toListMap()", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -98,7 +98,7 @@ void main() {
                 listMapFromListProduct[8]["price"],
                 listMapFromListProduct[9]["price"]
               ], equals([100, 101, 102, 103, 104, 105, 106, 107, 108, 109]));
-            }),
+            });
             test("toString()", () {
               final generatedListProduct = List<Product>.generate(1,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -108,7 +108,7 @@ void main() {
                   listProduct.toString(),
                   equals(
                       "ListProduct(listModel: [\nProduct(id: id0, price: 100),\n])"));
-            }),
+            });
             test("add(T newModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -119,7 +119,7 @@ void main() {
               expect(listProduct.listModel.length, equals(11));
               expect(listProduct.listModel[10].id, equals("id124"));
               expect(listProduct.listModel[10].price, equals(5314));
-            }),
+            });
             test("updateById(T newModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -129,7 +129,7 @@ void main() {
               expect(listProduct.listModel[0].price, equals(100));
               listProduct.updateById(Product(id: "id0", price: 5314));
               expect(listProduct.listModel[0].price, equals(5314));
-            }),
+            });
             test("deleteById(String id)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -141,7 +141,7 @@ void main() {
               expect(
                   [listProduct.listModel[0].id, listProduct.listModel[0].price],
                   equals(["id1", 101]));
-            }),
+            });
             test("addFromList(List<T> newListModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -159,7 +159,7 @@ void main() {
                 listProduct.listModel[10].price,
                 listProduct.listModel[11].price
               ], equals(["id425", "id643", 93125, 24112]));
-            }),
+            });
             test("updateFromListById(List<T> newListModel)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -178,7 +178,7 @@ void main() {
                 listProduct.listModel[0].price,
                 listProduct.listModel[1].price
               ], equals([93125, 24112]));
-            }),
+            });
             test("deleteFromListById(List<String> listId)", () {
               final generatedListProduct = List<Product>.generate(10,
                   (int index) => Product(id: "id$index", price: (100 + index)),
@@ -193,6 +193,6 @@ void main() {
                 listProduct.listModel[1].id,
                 listProduct.listModel[1].price
               ], equals(["id2", 102, "id3", 103]));
-            }),
+            });
           });
 }

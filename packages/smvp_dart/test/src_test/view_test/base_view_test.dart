@@ -19,10 +19,10 @@ final class MainView extends BaseView<EnumMainView> {
 void main() {
   group(
       "BaseView",
-      () => {
+      () {
             test("getViewState()", () {
               final mainView = MainView();
               expect(mainView.getViewState(), equals(EnumMainView.success));
-            }),
+            });
           });
 }
