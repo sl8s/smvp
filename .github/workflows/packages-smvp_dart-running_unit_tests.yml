@@ -1,5 +1,5 @@
 name: packages-smvp_dart-running_unit_tests
-run-name: ${{ github.actor }} - packages-smvp_dart-running_unit_tests
+run-name: ${{ github.actor }}
 on:
   push:
   workflow_dispatch:

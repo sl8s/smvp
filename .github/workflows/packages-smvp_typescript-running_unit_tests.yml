@@ -1,5 +1,5 @@
 name: packages-smvp_typescript-running_unit_tests.yml
-run-name: ${{ github.actor }} - packages-smvp_typescript-running_unit_tests.yml
+run-name: ${{ github.actor }}
 on:
   push:
   workflow_dispatch:
